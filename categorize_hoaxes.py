@@ -1,155 +1,140 @@
+import os
+import time
 import pandas as pd
-import re
-import sys
+import google.generativeai as genai
+from dotenv import load_dotenv
+import json
+import typing_extensions as typing
 
-# --- Extraction Logic (from extract_content.py) ---
-def parse_content(text):
-    if not isinstance(text, str):
-        return {}
+# Load environment variables
+load_dotenv()
+
+# Configure Gemini
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    print("Error: GEMINI_API_KEY not found in .env")
+    exit(1)
+
+genai.configure(api_key=api_key)
+
+# Configuration
+INPUT_FILE = "Scraping turnbackhoax.id - Complete.csv"
+OUTPUT_FILE = "categorized_hoaxes.csv"
+BATCH_SIZE = 50
+# Note: User explicitly requested gemini-2.5-flash.
+MODEL_NAME = "gemini-2.5-flash" 
+
+def categorize_batch(items):
+    # items is a list of dicts: [{'ID': 123, 'TITLE': '...'}, ...]
     
-    # Regex to find tags like [TAG] or TAG:
-    pattern = r'(?:\[([A-Z\s]+)\]|\b([A-Z]+)\s*:)'
-    parts = re.split(pattern, text)
+    prompt = """
+    You are an expert at categorizing news and claims.
+    The data is from turnbackhoax.id, an Indonesian anti-hoax database by MAFINDO.
     
-    result = {}
-    # Iterate with step 3 because each split adds 2 capturing groups + 1 text chunk
-    for i in range(1, len(parts), 3):
-        tag_bracket = parts[i]
-        tag_colon = parts[i+1]
-        content = parts[i+2].strip() if i+2 < len(parts) else ""
+    Categorize each of the following items based on their Title into one of these categories:
+    - politics
+    - scam
+    - others
+    
+    Return the result as a JSON list of objects, where each object has 'id' and 'category'.
+    """
+    
+    # Prepare the input text
+    items_text = ""
+    for item in items:
+        items_text += f"ID: {item['ID']}\nTitle: {item['TITLE']}\n---\n"
         
-        tag = tag_bracket if tag_bracket else tag_colon
-        if tag:
-            tag = tag.strip()
-            result[tag] = content
-            
-    return result
+    full_prompt = prompt + "\nItems to categorize:\n" + items_text
 
-# --- Cleaning Logic (from clean_columns.py) ---
-def clean_text(text):
-    if not isinstance(text, str):
-        return text
-    
-    # 1. Strip whitespace
-    text = text.strip()
-    # 2. Remove leading colon and whitespace
-    text = re.sub(r'^[:\s]+', '', text)
-    # 3. Remove trailing equals signs and whitespace
-    text = re.sub(r'[\s=]+$', '', text)
-    # 4. Remove enclosing quotes
-    text = text.strip('"“”')
-    # 5. Final strip
-    text = text.strip()
-    
-    return text
+    # Define the schema for structured output
+    generation_config = {
+        "response_mime_type": "application/json",
+        "response_schema": {
+            "type": "ARRAY",
+            "items": {
+                "type": "OBJECT",
+                "properties": {
+                    "id": {"type": "INTEGER"},
+                    "category": {"type": "STRING", "enum": ["politics", "scam", "others"]}
+                },
+                "required": ["id", "category"]
+            }
+        }
+    }
 
-# --- Categorization Logic ---
-def categorize_text(text):
-    if not isinstance(text, str):
-        return 'Other'
-    
-    text_lower = text.lower()
-    
-    # Keywords for Scams (Bucket B) - Check FIRST to remove noise
-    scam_keywords = [
-        'undian', 'hadiah', 'bank', 'bri', 'bni', 'mandiri', 'bca', 'saldo', 
-        'giveaway', 'dana kaget', 'kuota', 'pulsa', 'internet gratis', 
-        'lowongan', 'loker', 'rekrutmen', 'bumn', 'pln', 'pertamina', 
-        'bpjs', 'bansos', 'blt', 'prakerja', 'promo', 'tebus murah'
-    ]
-    
-    for keyword in scam_keywords:
-        if keyword in text_lower:
-            return 'Scam'
-            
-    # Keywords for Politics (Bucket A)
-    politics_keywords = [
-        'prabowo', 'gibran', 'anies', 'ganjar', 'jokowi', 'kpu', 'bawaslu', 
-        'pemilu', 'curang', 'mk', 'partai', 'pilpres', 'capres', 'cawapres', 
-        'koalisi', 'debat', 'kampanye', 'tps', 'surat suara', 'kotak suara', 
-        'penghitungan', 'sirekap', 'hak angket', 'mahkamah konstitusi', 
-        'politik', 'presiden', 'wakil presiden'
-    ]
-    
-    for keyword in politics_keywords:
-        if keyword in text_lower:
-            return 'Politics'
-            
-    return 'Other'
+    model = genai.GenerativeModel(MODEL_NAME, generation_config=generation_config)
+
+    try:
+        response = model.generate_content(full_prompt)
+        return json.loads(response.text)
+    except Exception as e:
+        print(f"Error generating content: {e}")
+        return []
 
 def main():
-    input_file = "Scraping turnbackhoax.id - Complete.csv"
-    output_politics = "politics_hoaxes.csv"
+    if not os.path.exists(INPUT_FILE):
+        print(f"Input file {INPUT_FILE} not found.")
+        return
+
+    print(f"Reading {INPUT_FILE}...")
+    df = pd.read_csv(INPUT_FILE)
     
-    print(f"Reading {input_file}...")
-    try:
-        df = pd.read_csv(input_file)
-    except Exception as e:
-        print(f"Error reading CSV: {e}")
-        sys.exit(1)
-        
-    print("Processing content (Extraction & Cleaning)...")
+    # Ensure ID is integer
+    df['ID'] = pd.to_numeric(df['ID'], errors='coerce').fillna(0).astype(int)
     
-    # 1. Extract Structure
-    if 'CONTENT' in df.columns:
-        extracted_data = df['CONTENT'].apply(parse_content)
-        extracted_df = pd.DataFrame(extracted_data.tolist())
-        
-        # Merge extracted columns back to df temporarily to handle logic
-        # We mainly care about NARASI
-        if 'NARASI' in extracted_df.columns:
-            df['NARASI'] = extracted_df['NARASI']
-        else:
-            df['NARASI'] = None
-            
-        if 'NARASII' in extracted_df.columns:
-            df['NARASI'] = df['NARASI'].combine_first(extracted_df['NARASII'])
-            
+    # Check if output file exists to resume or start over
+    processed_ids = set()
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            existing_df = pd.read_csv(OUTPUT_FILE)
+            if 'ID' in existing_df.columns:
+                processed_ids = set(existing_df['ID'])
+            print(f"Resuming... {len(processed_ids)} items already processed.")
+        except Exception:
+            print("Output file exists but could not be read. Starting fresh.")
     else:
-        print("Warning: CONTENT column not found.")
-        df['NARASI'] = None
+        # Initialize output file with headers
+        pd.DataFrame(columns=['ID', 'TITLE', 'LLM_CATEGORY']).to_csv(OUTPUT_FILE, index=False)
 
-    # 2. Create HOAX_TEXT (Clean NARASI or Fallback to TITLE)
-    print("Creating HOAX_TEXT...")
+    # Filter out already processed items
+    # We only need ID and TITLE for the API
+    items_to_process = df[~df['ID'].isin(processed_ids)][['ID', 'TITLE']].to_dict('records')
     
-    # Helper to get the raw text source
-    def get_raw_hoax_text(row):
-        if pd.notna(row['NARASI']) and str(row['NARASI']).strip():
-            return str(row['NARASI'])
-        return str(row['TITLE'])
+    total_items = len(items_to_process)
+    print(f"Total items to process: {total_items}")
 
-    df['HOAX_TEXT_RAW'] = df.apply(get_raw_hoax_text, axis=1)
-    
-    # 3. Clean it
-    df['HOAX_TEXT'] = df['HOAX_TEXT_RAW'].apply(clean_text)
-    
-    # 4. Categorize
-    print("Categorizing data...")
-    df['CATEGORY_TAG'] = df['HOAX_TEXT'].apply(categorize_text)
-    
-    # Print statistics
-    counts = df['CATEGORY_TAG'].value_counts()
-    print("\nCategory Distribution:")
-    print(counts)
-    
-    # Filter and save Politics bucket
-    politics_df = df[df['CATEGORY_TAG'] == 'Politics']
-    print(f"Saving {len(politics_df)} political hoaxes to {output_politics}...")
-    politics_df.to_csv(output_politics, index=False)
+    for i in range(0, total_items, BATCH_SIZE):
+        batch = items_to_process[i:i+BATCH_SIZE]
+        print(f"Processing batch {i//BATCH_SIZE + 1}/{(total_items + BATCH_SIZE - 1)//BATCH_SIZE} ({len(batch)} items)...")
+        
+        results = categorize_batch(batch)
+        
+        if not results:
+            print("Batch failed or returned empty. Skipping...")
+            continue
+            
+        # Create a DataFrame for the results
+        batch_results = []
+        for res in results:
+            # Find the title from the batch
+            original_item = next((item for item in batch if item['ID'] == res['id']), None)
+            if original_item:
+                batch_results.append({
+                    'ID': res['id'],
+                    'TITLE': original_item['TITLE'],
+                    'LLM_CATEGORY': res['category']
+                })
+        
+        if batch_results:
+            batch_df = pd.DataFrame(batch_results)
+            # Append to CSV, skip header
+            batch_df.to_csv(OUTPUT_FILE, mode='a', header=False, index=False)
+            print(f"Saved {len(batch_df)} items to {OUTPUT_FILE}")
+        
+        # Rate limiting to be safe
+        time.sleep(2)
 
-    # Filter and save Scam bucket
-    scam_df = df[df['CATEGORY_TAG'] == 'Scam']
-    output_scam = "scam_hoaxes.csv"
-    print(f"Saving {len(scam_df)} scam hoaxes to {output_scam}...")
-    scam_df.to_csv(output_scam, index=False)
-
-    # Filter and save Other bucket
-    other_df = df[df['CATEGORY_TAG'] == 'Other']
-    output_other = "other_hoaxes.csv"
-    print(f"Saving {len(other_df)} other hoaxes to {output_other}...")
-    other_df.to_csv(output_other, index=False)
-    
-    print("Done.")
+    print("Done!")
 
 if __name__ == "__main__":
     main()
