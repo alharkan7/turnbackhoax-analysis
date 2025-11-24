@@ -668,11 +668,11 @@
             <button class="main-tab-button active" onclick="openMainTab(event, 'cover')">Start</button>
             <button class="main-tab-button" onclick="openMainTab(event, 'summary')">Summary</button>
             <button class="main-tab-button" onclick="openMainTab(event, 'methodology')">Methodology</button>
-            <button class="main-tab-button" onclick="openMainTab(event, 'dataset')">Dataset</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'model-data')">Model</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'topics')">Topics</button>
             <button class="main-tab-button" onclick="openMainTab(event, 'interactive')">Visualization</button>
             <button class="main-tab-button" onclick="openMainTab(event, 'results')">Results</button>
             <button class="main-tab-button" onclick="openMainTab(event, 'findings')">Findings</button>
-            <button class="main-tab-button" onclick="openMainTab(event, 'quality')">Model</button>
             <button class="main-tab-button" onclick="openMainTab(event, 'recommendations')">Recommendations</button>
             <button class="main-tab-button" onclick="openMainTab(event, 'appendix')">Appendix</button>
         </div>
@@ -793,6 +793,38 @@
                     patterns</li>
             </ol>
 
+            <h3>Dataset Statistics</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Documents</th>
+                        <th>% of Total</th>
+                        <th>Avg Text Length</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-politics">Politics</span></td>
+                        <td>1,358</td>
+                        <td>36.2%</td>
+                        <td>392 chars</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-scam">Scam</span></td>
+                        <td>939</td>
+                        <td>25.1%</td>
+                        <td>401 chars</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-others">Others</span></td>
+                        <td>1,449</td>
+                        <td>38.7%</td>
+                        <td>455 chars</td>
+                    </tr>
+                </tbody>
+            </table>
+
             <h3>Indonesian Text Preprocessing Pipeline</h3>
             <ol>
                 <li><strong>Tokenization:</strong> Lowercase conversion, URL removal, special character cleaning</li>
@@ -821,51 +853,56 @@
         </section>
         </div>
 
-        <!-- Tab 3: Dataset Overview -->
-        <div id="dataset" class="main-tab-content">
+        <!-- Tab 3: Model -->
+        <div id="model-data" class="main-tab-content">
         <section>
-            <h2>Dataset Overview</h2>
+            <h2>Model Overview</h2>
+
+            <h3>Model Selection & Performance (Coherence Score)</h3>
 
             <table>
                 <thead>
                     <tr>
                         <th>Category</th>
-                        <th>Documents</th>
-                        <th>% of Total</th>
-                        <th>Topics</th>
-                        <th>Coherence</th>
-                        <th>Avg Text Length</th>
+                        <th>5 Topics</th>
+                        <th>7 Topics</th>
+                        <th>10 Topics</th>
+                        <th>Best Choice</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span class="badge badge-politics">Politics</span></td>
-                        <td>1,358</td>
-                        <td>36.2%</td>
-                        <td>10</td>
-                        <td>0.458</td>
-                        <td>392 chars</td>
+                        <td>Politics</td>
+                        <td>0.4520</td>
+                        <td>0.4525</td>
+                        <td style="background-color: #d4edda;"><strong>0.4581</strong></td>
+                        <td>10 topics</td>
                     </tr>
                     <tr>
-                        <td><span class="badge badge-scam">Scam</span></td>
-                        <td>939</td>
-                        <td>25.1%</td>
-                        <td>5</td>
-                        <td>0.452</td>
-                        <td>401 chars</td>
+                        <td>Scam</td>
+                        <td style="background-color: #d4edda;"><strong>0.4523</strong></td>
+                        <td>0.4487</td>
+                        <td>0.4419</td>
+                        <td>5 topics</td>
                     </tr>
                     <tr>
-                        <td><span class="badge badge-others">Others</span></td>
-                        <td>1,449</td>
-                        <td>38.7%</td>
-                        <td>7</td>
-                        <td><strong>0.461</strong></td>
-                        <td>455 chars</td>
+                        <td>Others</td>
+                        <td>0.4502</td>
+                        <td style="background-color: #d4edda;"><strong>0.4610</strong></td>
+                        <td>0.4531</td>
+                        <td>7 topics</td>
                     </tr>
                 </tbody>
             </table>
 
-            <h3>Top 5 Most Prevalent Topics (Overall)</h3>
+            <div class="alert alert-info">
+                <strong>💡 Why different topic numbers?</strong> Political narratives are diverse and creative
+                (requiring 10 topics), while scam patterns follow 5 basic templates. The Others category's higher
+                coherence (0.461) suggests these topics follow more stereotypical patterns than creative political
+                attacks.
+            </div>
+
+            <h3>Top 5 Most Prevalent Topics</h3>
             <ol>
                 <li><strong>General Political Discourse (Politics-5):</strong> 449 docs (12% of total) - Anies Baswedan
                     attacks</li>
@@ -875,10 +912,272 @@
                 <li><strong>Account Phishing (Scam-2):</strong> 334 docs (9%) - Banking and social media phishing</li>
                 <li><strong>Disasters & Events (Others-2):</strong> 263 docs (7%) - Natural disaster misinformation</li>
             </ol>
+
+            <h3>Limitations & Considerations</h3>
+            <ul>
+                <li><strong>Topic 6 (Politics):</strong> Contains fact-checking metadata artifacts, suggesting NARASI
+                    extraction could be refined</li>
+                <li><strong>Topic 5 (Politics):</strong> Very large (449 docs, 33%) - may benefit from subdivision in
+                    future analysis</li>
+                <li><strong>Temporal Gaps:</strong> Analysis doesn't track topic evolution over the election cycle -
+                    recommended for Phase II</li>
+                <li><strong>Language Dependency:</strong> Indonesian-specific preprocessing may not transfer to other
+                    languages</li>
+            </ul>
         </section>
         </div>
 
-        <!-- Tab 4: Interactive Exploration -->
+        <!-- Tab 4: Topics Overview -->
+        <div id="topics" class="main-tab-content">
+        <section>
+            <h2>Identified Topics by Category</h2>
+            <p>Comprehensive overview of all 22 topics identified across three categories of hoax narratives.</p>
+
+            <div class="sub-tabs">
+                <button class="sub-tab-button active" onclick="openSubTab(event, 'politics-topics', 'topics')">
+                    🏛️ Politics (10 Topics)
+                </button>
+                <button class="sub-tab-button" onclick="openSubTab(event, 'scam-topics', 'topics')">
+                    ⚠️ Scam (5 Topics)
+                </button>
+                <button class="sub-tab-button" onclick="openSubTab(event, 'others-topics', 'topics')">
+                    📰 Others (7 Topics)
+                </button>
+            </div>
+
+            <!-- Politics Topics -->
+            <div id="politics-topics" class="sub-tab-content active">
+                <h3>Politics Category: 10 Topics</h3>
+                <p><strong>1,358 political hoax documents</strong> from the 2024 Indonesian election period.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 8%;">Topic ID</th>
+                            <th style="width: 25%;">Topic Label</th>
+                            <th style="width: 10%;">Documents</th>
+                            <th style="width: 8%;">% Share</th>
+                            <th style="width: 49%;">Top Terms</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0</strong></td>
+                            <td>Social Media Verification</td>
+                            <td>107</td>
+                            <td>7.9%</td>
+                            <td><code>temu, rupa, gambar, jelas_akun, judul, sama, sedang</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>Palace Appointments</td>
+                            <td>8</td>
+                            <td>0.6%</td>
+                            <td><code>istana, lantik, kaesang, pramono, ganti, bakal</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>Foreign Interference & Religion</td>
+                            <td>8</td>
+                            <td>0.6%</td>
+                            <td><code>bongkar, cina, agama, partai, ancam, bikin</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>Parliamentary Affairs</td>
+                            <td>9</td>
+                            <td>0.7%</td>
+                            <td><code>dpr, bayar, lapor, gratis, milik, jelas_buah</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>Anti-Corruption Protests</td>
+                            <td>8</td>
+                            <td>0.6%</td>
+                            <td><code>demo, kpk, mahasiswa, gagal, kasus, libat</code></td>
+                        </tr>
+                        <tr style="background-color: #fff3cd;">
+                            <td><strong>5</strong></td>
+                            <td><strong>General Politics (Anies Attacks)</strong></td>
+                            <td><strong>449</strong></td>
+                            <td><strong>33.1%</strong></td>
+                            <td><code>indonesia, presiden, anies, negara, jadi, sebut</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>6</strong></td>
+                            <td>Fact-Check Metadata (Artifacts)</td>
+                            <td>46</td>
+                            <td>3.4%</td>
+                            <td><code>disinformasi_first, draft_news, jakarta, jenis_mis</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>7</strong></td>
+                            <td>Election Fraud (China)</td>
+                            <td>22</td>
+                            <td>1.6%</td>
+                            <td><code>china, suara, kalah, google, mau, jabat</code></td>
+                        </tr>
+                        <tr style="background-color: #fff3cd;">
+                            <td><strong>8</strong></td>
+                            <td><strong>Jokowi-Prabowo-Gibran Coalition</strong></td>
+                            <td><strong>146</strong></td>
+                            <td><strong>10.8%</strong></td>
+                            <td><code>jokowi, prabowo, gibran, ikn, pilkada, anak</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>9</strong></td>
+                            <td>KPU Manipulation</td>
+                            <td>14</td>
+                            <td>1.0%</td>
+                            <td><code>kpu, pecat, kuasa, panggil, gak, naik</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-warning">
+                    <strong>Key Insight:</strong> Topics 5 and 8 (highlighted) represent <strong>44% of all political hoaxes</strong> 
+                    and focus on candidate-specific character attacks.
+                </div>
+            </div>
+
+            <!-- Scam Topics -->
+            <div id="scam-topics" class="sub-tab-content">
+                <h3>Scam Category: 5 Topics</h3>
+                <p><strong>939 scam-related hoax documents</strong> targeting economic vulnerabilities.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 8%;">Topic ID</th>
+                            <th style="width: 25%;">Topic Label</th>
+                            <th style="width: 10%;">Documents</th>
+                            <th style="width: 8%;">% Share</th>
+                            <th style="width: 49%;">Top Terms</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background-color: #fff3cd;">
+                            <td><strong>0</strong></td>
+                            <td><strong>Fake Job Recruitment</strong></td>
+                            <td><strong>446</strong></td>
+                            <td><strong>47.5%</strong></td>
+                            <td><code>juta, loker, lowong_kerja, daftar, indonesia, gaji</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>Lottery & Banking Scams</td>
+                            <td>121</td>
+                            <td>12.9%</td>
+                            <td><code>bank, undi, festival, gratis, motor, hadiah</code></td>
+                        </tr>
+                        <tr style="background-color: #fff3cd;">
+                            <td><strong>2</strong></td>
+                            <td><strong>Account Phishing</strong></td>
+                            <td><strong>334</strong></td>
+                            <td><strong>35.6%</strong></td>
+                            <td><code>akun, resmi, nomor, hubung, pihak, minta</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>Fake Recruitment Letters</td>
+                            <td>155</td>
+                            <td>16.5%</td>
+                            <td><code>gaji, kerja, surat, posisi, terima, bulan</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>Celebrity Deepfake Endorsements</td>
+                            <td>110</td>
+                            <td>11.7%</td>
+                            <td><code>rupa, temu, guna, taut_daftar, pasti, profil</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-warning">
+                    <strong>Key Insight:</strong> Topics 0, 2, and 3 (highlighted) represent <strong>82% of scam hoaxes</strong> 
+                    and exploit economic vulnerability through fake job offers and financial fraud.
+                </div>
+            </div>
+
+            <!-- Others Topics -->
+            <div id="others-topics" class="sub-tab-content">
+                <h3>Others Category: 7 Topics</h3>
+                <p><strong>1,449 miscellaneous hoax documents</strong> covering health, disasters, and social issues.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 8%;">Topic ID</th>
+                            <th style="width: 25%;">Topic Label</th>
+                            <th style="width: 10%;">Documents</th>
+                            <th style="width: 8%;">% Share</th>
+                            <th style="width: 49%;">Top Terms</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0</strong></td>
+                            <td>Health Misinformation</td>
+                            <td>165</td>
+                            <td>11.4%</td>
+                            <td><code>sehat, obat, sakit, sebab, akibat, bahaya</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>News Articles & Headlines</td>
+                            <td>144</td>
+                            <td>9.9%</td>
+                            <td><code>artikel, judul, periksa_mafindo, tiba, tanda</code></td>
+                        </tr>
+                        <tr style="background-color: #fff3cd;">
+                            <td><strong>2</strong></td>
+                            <td><strong>Disasters & Events</strong></td>
+                            <td><strong>263</strong></td>
+                            <td><strong>18.2%</strong></td>
+                            <td><code>kota, banjir, bencana, gunung, warga, gempa</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>COVID-19 & Conspiracy</td>
+                            <td>51</td>
+                            <td>3.5%</td>
+                            <td><code>vaksin, covid, virus, bill_gates, wef, digital</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>Religion & Sports</td>
+                            <td>56</td>
+                            <td>3.9%</td>
+                            <td><code>islam, timnas, piala_dunia, umat, masjid</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>Mixed Content</td>
+                            <td>639</td>
+                            <td>44.1%</td>
+                            <td><code>indonesia, baru, dapat, orang, masuk, jadi</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>6</strong></td>
+                            <td>Medical Miracle Cures</td>
+                            <td>77</td>
+                            <td>5.3%</td>
+                            <td><code>sembuh, darah, air, ginjal, israel, minum</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-info">
+                    <strong>Note:</strong> This category achieved the highest coherence score (0.461), indicating 
+                    well-separated and interpretable topics. Health misinformation (Topics 0, 3, 6) represents <strong>31%</strong> 
+                    of this category.
+                </div>
+            </div>
+        </section>
+        </div>
+
+        <!-- Tab 5: Interactive Exploration -->
         <div id="interactive" class="main-tab-content">
         <section>
             <h2>Interactive Topic Exploration</h2>
@@ -992,7 +1291,7 @@
         </section>
         </div>
 
-        <!-- Tab 5: Detailed Results -->
+        <!-- Tab 6: Detailed Results -->
         <div id="results" class="main-tab-content">
         <section>
             <h2>Detailed Results by Category</h2>
@@ -1241,7 +1540,7 @@
         </section>
         </div>
 
-        <!-- Tab 6: Key Findings & Implications -->
+        <!-- Tab 7: Key Findings & Implications -->
         <div id="findings" class="main-tab-content">
         <section>
             <h2>Key Findings & Implications</h2>
@@ -1282,66 +1581,6 @@
                 distrust narratives, and foreign interference conspiracies creates a <strong>triple threat</strong> to
                 Indonesian democracy: candidate delegitimization, institutional erosion, and nationalist mobilization.
             </div>
-        </section>
-        </div>
-
-        <!-- Tab 7: Model Quality & Validation -->
-        <div id="quality" class="main-tab-content">
-        <section>
-            <h2>Model Quality & Validation</h2>
-
-            <h3>Coherence Score Analysis</h3>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>5 Topics</th>
-                        <th>7 Topics</th>
-                        <th>10 Topics</th>
-                        <th>Best Choice</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Politics</td>
-                        <td>0.4520</td>
-                        <td>0.4525</td>
-                        <td style="background-color: #d4edda;"><strong>0.4581</strong></td>
-                        <td>10 topics</td>
-                    </tr>
-                    <tr>
-                        <td>Scam</td>
-                        <td style="background-color: #d4edda;"><strong>0.4523</strong></td>
-                        <td>0.4487</td>
-                        <td>0.4419</td>
-                        <td>5 topics</td>
-                    </tr>
-                    <tr>
-                        <td>Others</td>
-                        <td>0.4502</td>
-                        <td style="background-color: #d4edda;"><strong>0.4610</strong></td>
-                        <td>0.4531</td>
-                        <td>7 topics</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p><strong>Interpretation:</strong> Different categories naturally cluster at different granularity levels.
-                Political discourse is most diverse (needs 10 topics), scam patterns follow 5 templates, and Others
-                category's health/disaster narratives cluster into 7 distinct themes with highest interpretability.</p>
-
-            <h3>Limitations & Considerations</h3>
-            <ul>
-                <li><strong>Topic 6 (Politics):</strong> Contains fact-checking metadata artifacts, suggesting NARASI
-                    extraction could be refined</li>
-                <li><strong>Topic 5 (Politics):</strong> Very large (449 docs, 33%) - may benefit from subdivision in
-                    future analysis</li>
-                <li><strong>Temporal Gaps:</strong> Analysis doesn't track topic evolution over the election cycle -
-                    recommended for Phase II</li>
-                <li><strong>Language Dependency:</strong> Indonesian-specific preprocessing may not transfer to other
-                    languages</li>
-            </ul>
         </section>
         </div>
 
@@ -1386,12 +1625,6 @@
                     manipulation patterns</li>
             </ol>
 
-            <div class="nav-pills">
-                <a href="javascript:void(0)" onclick="switchToTab('interactive')" class="nav-pill">Explore Interactive Visualizations</a>
-                <a href="javascript:void(0)" onclick="switchToTab('results')" class="nav-pill">View Detailed Results</a>
-                <a href="javascript:void(0)" onclick="switchToTab('findings')" class="nav-pill">Key Findings</a>
-                <a href="javascript:void(0)" onclick="switchToTab('appendix')" class="nav-pill">View Appendix</a>
-            </div>
         </section>
         </div>
 
@@ -1400,7 +1633,7 @@
         <section>
             <h2>Appendix</h2>
 
-            <h3>A. Technical Specifications</h3>
+            <h3>Technical Specifications</h3>
 
             <h4>Software Stack</h4>
             <ul>
@@ -1428,7 +1661,7 @@
             <p>Analysis completed on standard hardware (no GPU required). Training time: ~5 minutes per category (15
                 minutes total). Preprocessing: ~2 minutes per category.</p>
 
-            <h3>B. About This Analysis</h3>
+            <h3>About This Analysis</h3>
 
             <p><strong>Project Title:</strong> The Dynamics of Hoaxes in Indonesia: Topic Modeling Analysis of TurnBackHoax.id Data in 2024</p>
             <p><strong>Researcher:</strong> Ali Al Harkan (2406480304)</p>
