@@ -18,9 +18,9 @@ The `CONTENT` column is a mix of the hoax and the correction. You must separate 
 Do not manually tag 3,700 rows. Use keyword-based auto-tagging to split the dataset into three buckets. You only analyze **Bucket A**.
 
   * **Bucket A: Politics (The Gold Mine)**
-      * *Keywords:* `prabowo, gibran, anies, ganjar, jokowi, kpu, bawaslu, pemilu, curang, mk, partai`.
+      * *Keywords:* `prabowo, gibran, anies, ganjar, jokowi, kpu, bawaslu, pemilu, curang, mk, partai, pilpres, capres, cawapres, koalisi, debat, kampanye, tps, surat suara, kotak suara, penghitungan, sirekap, hak angket, mahkamah konstitusi, politik, presiden, wakil presiden`.
   * **Bucket B: Scams (The Noise)**
-      * *Keywords:* `undian, hadiah, bank, bri, bni, saldo, giveaway, dana kaget`.
+      * *Keywords:* `undian, hadiah, bank, bri, bni, mandiri, bca, saldo, giveaway, dana kaget, kuota, pulsa, internet gratis, lowongan, loker, rekrutmen, bumn, pln, pertamina, bpjs, bansos, blt, prakerja, promo, tebus murah`.
       * *Action:* **REMOVE THIS.** It skews Topic Modeling.
   * **Bucket C: Other (Health, Disaster, Religion)**
       * *Action:* Keep only if relevant to "social polarization," otherwise exclude.
