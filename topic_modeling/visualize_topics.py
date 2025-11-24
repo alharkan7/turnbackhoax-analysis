@@ -2,6 +2,11 @@
 """
 Create supplementary visualizations for LDA topic modeling results.
 Generates bar charts, heatmaps, and word clouds for topic interpretation.
+
+Usage:
+    python3 visualize_topics.py <output_dir>
+    
+    output_dir: directory containing LDA results (e.g., topic_modeling/scam_category)
 """
 
 import pandas as pd
@@ -10,6 +15,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from wordcloud import WordCloud
 from pathlib import Path
+import sys
 
 # Set style
 sns.set_style("whitegrid")
@@ -19,7 +25,7 @@ plt.rcParams['font.size'] = 10
 class TopicVisualizer:
     """Creates visualizations for LDA topic modeling results."""
     
-    def __init__(self, output_dir="topic_modeling"):
+    def __init__(self, output_dir):
         self.output_dir = Path(output_dir)
         self.viz_dir = self.output_dir / "visualizations"
         self.viz_dir.mkdir(exist_ok=True)
@@ -103,7 +109,6 @@ class TopicVisualizer:
         """Plot heatmap of topic distributions across documents."""
         print("\n[3/5] Creating topic distribution heatmap...")
         
-        # Pivot to get document-topic matrix
         # Get dominant topic for each document
         dominant_topics = self.doc_topics.loc[
             self.doc_topics.groupby('document_id')['probability'].idxmax()
@@ -229,11 +234,15 @@ class TopicVisualizer:
         print("✓ VISUALIZATIONS COMPLETE")
         print("=" * 60)
         print(f"\nAll visualizations saved to: {self.viz_dir}/")
-        print("\nTopic Summary:")
-        print(summary_df.to_string(index=False))
 
 def main():
-    visualizer = TopicVisualizer()
+    if len(sys.argv) != 2:
+        print("Usage: python3 visualize_topics.py <output_dir>")
+        print("  output_dir: directory containing LDA results")
+        sys.exit(1)
+    
+    output_dir = sys.argv[1]
+    visualizer = TopicVisualizer(output_dir)
     visualizer.run_all_visualizations()
 
 if __name__ == "__main__":
