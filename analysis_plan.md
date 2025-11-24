@@ -41,7 +41,7 @@ Don't just "conduct" it. You need to parametrize it.
       * **Stopword Removal:** Crucial for Bahasa Indonesia. Remove: *dan, yang, di, ke, dari, video, foto, ini, itu, hoax, cek, fakta*.
       * **N-Grams:** Use Bigrams (2 words) to catch terms like "TKA China", "Surat Suara", "Ijazah Palsu".
 
-#### **2. Text Network Analysis (Semantic Network)**
+#### **2. Text Network Analysis**
 
 This is superior to word clouds. It shows *narrative structures*.
 

@@ -1,0 +1,1232 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Political Hoax Network Analysis</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow: hidden;
+        }
+        
+        #header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        #header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        #header p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 3px;
+        }
+        
+        #container {
+            display: flex;
+            height: calc(100vh - 65px);
+        }
+        
+        #controls {
+            width: 320px;
+            background: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        #mynetwork {
+            flex: 1;
+            background: #ffffff;
+        }
+        
+        .control-section {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .control-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .control-group {
+            margin-bottom: 12px;
+        }
+        
+        .control-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e9ecef;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+        
+        .control-group input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .value-display {
+            display: inline-block;
+            float: right;
+            font-size: 12px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .control-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 12px;
+            background: white;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button.secondary {
+            background: #6c757d;
+        }
+        
+        button.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .legend {
+            margin-top: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .stats {
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+        
+        .stats div {
+            margin-bottom: 3px;
+        }
+        
+        #info-panel {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-width: 300px;
+            display: none;
+            z-index: 100;
+        }
+        
+        #info-panel h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        #info-panel .info-row {
+            font-size: 12px;
+            margin-bottom: 4px;
+            color: #495057;
+        }
+        
+        #info-panel .info-label {
+            font-weight: 600;
+            display: inline-block;
+            width: 120px;
+        }
+    
+        #info-drawer {
+            position: fixed;
+            right: -600px;
+            top: 0;
+            width: 600px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 12px rgba(0,0,0,0.15);
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        #info-drawer.open {
+            right: 0;
+        }
+        
+        #info-drawer-content {
+            padding: 30px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        #info-drawer-content h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        #info-drawer-content h2:first-child {
+            margin-top: 0;
+        }
+        
+        #info-drawer-content h3 {
+            font-size: 16px;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+        }
+        
+        #info-drawer-content h4 {
+            font-size: 14px;
+            color: #4a5568;
+            margin: 15px 0 8px 0;
+        }
+        
+        #info-drawer-content h5 {
+            font-size: 13px;
+            color: #606971;
+            margin: 12px 0 6px 0;
+        }
+        
+        #info-drawer-content p {
+            margin: 10px 0;
+            color: #495057;
+        }
+        
+        #info-drawer-content ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        #info-drawer-content li {
+            margin: 5px 0;
+            color: #495057;
+        }
+        
+        #info-drawer-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        
+        #info-drawer-content table th {
+            background: #f8f9fa;
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            font-weight: 600;
+        }
+        
+        #info-drawer-content table td {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        #info-drawer-content hr {
+            border: none;
+            border-top: 1px solid #dee2e6;
+            margin: 25px 0;
+        }
+        
+        #info-drawer-content strong {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        #info-drawer-content code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+        }
+        
+        #info-toggle-btn {
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #info-toggle-btn:hover {
+            background: #5568d3;
+            transform: scale(1.1);
+        }
+        
+        #info-toggle-btn.drawer-open {
+            right: 620px;
+        }
+        
+        #info-drawer-header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        
+        #info-drawer-header h2 {
+            margin: 0;
+            font-size: 18px;
+            border: none;
+            padding: 0;
+        }
+        
+        #info-drawer-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+        
+        #info-drawer-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>🕸️ Political Hoax Network Analysis</h1>
+        <p>38 entities • 227 connections • 5 communities | 2024 Indonesian Political Hoaxes</p>
+    </div>
+    
+    <div id="container">
+        <div id="controls">
+            <div class="control-section">
+                <h3>⚙️ Physics Settings</h3>
+                
+                <div class="control-group">
+                    <label>Solver Algorithm</label>
+                    <select id="solver">
+                        <option value="barnesHut">Barnes-Hut (Fast)</option>
+                        <option value="forceAtlas2Based" selected>Force Atlas 2 (Balanced)</option>
+                        <option value="repulsion">Repulsion (Spread)</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Spring Length <span class="value-display" id="spring-val">150</span></label>
+                    <input type="range" id="springLength" min="50" max="500" value="150">
+                </div>
+                
+                <div class="control-group">
+                    <label>Spring Strength <span class="value-display" id="spring-str-val">0.05</span></label>
+                    <input type="range" id="springConstant" min="0.01" max="0.2" step="0.01" value="0.05">
+                </div>
+                
+                <div class="control-group">
+                    <label>Repulsion <span class="value-display" id="repulsion-val">-2000</span></label>
+                    <input type="range" id="gravitationalConstant" min="-10000" max="-500" step="100" value="-2000">
+                </div>
+                
+                <div class="control-group">
+                    <label>Central Gravity <span class="value-display" id="gravity-val">0.01</span></label>
+                    <input type="range" id="centralGravity" min="0" max="0.5" step="0.01" value="0.01">
+                </div>
+            </div>
+            
+            <div class="control-section">
+                <h3>🎨 Display Options</h3>
+                
+                <div class="control-group">
+                    <label>Node Size By</label>
+                    <select id="nodeSizing">
+                        <option value="count">Mention Count</option>
+                        <option value="betweenness">Betweenness Centrality</option>
+                        <option value="degree">Degree Centrality</option>
+                        <option value="uniform">Uniform</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Min Node Size <span class="value-display" id="min-size-val">10</span></label>
+                    <input type="range" id="minNodeSize" min="5" max="30" value="10">
+                </div>
+                
+                <div class="control-group">
+                    <label>Edge Width Factor <span class="value-display" id="edge-val">1</span></label>
+                    <input type="range" id="edgeWidth" min="0.1" max="3" step="0.1" value="1">
+                </div>
+            </div>
+            
+            <div class="control-section">
+                <h3>🔍 Filter</h3>
+                
+                <div class="control-group">
+                    <label>Show Communities</label>
+                    <select id="communityFilter" multiple size="5" style="height: auto;">
+                        <option value="0" selected>Govt & Institutional (Red)</option>
+                        <option value="1" selected>Electoral Process (Blue)</option>
+                        <option value="2" selected>Fraud & Oversight (Green)</option>
+                        <option value="3" selected>Opposition (Orange)</option>
+                        <option value="4" selected>Media Critics (Purple)</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Min Mentions <span class="value-display" id="min-mentions-val">0</span></label>
+                    <input type="range" id="minMentions" min="0" max="50" value="0">
+                </div>
+            </div>
+            
+            <button onclick="updateNetwork()">🔄 Apply Changes</button>
+            <button onclick="togglePhysics()" id="physics-toggle">⏸️ Pause Physics</button>
+            <button onclick="resetView()" class="secondary">↺ Reset View</button>
+            <button onclick="fitNetwork()" class="secondary">⊡ Fit to Screen</button>
+            
+            <div class="control-section">
+                <h3>📊 Legend</h3>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #e74c3c;"></div>
+                        <div>Government & Institutional</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3498db;"></div>
+                        <div>Electoral Process</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #2ecc71;"></div>
+                        <div>Fraud & Oversight</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f39c12;"></div>
+                        <div>Opposition Candidates</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #9b59b6;"></div>
+                        <div>Media Critics</div>
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <div><strong>Visible:</strong> <span id="stats-nodes">38</span> nodes, <span id="stats-edges">227</span> edges</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mynetwork"></div>
+    </div>
+    
+    <div id="info-panel">
+        <h4 id="info-title"></h4>
+        <div id="info-content"></div>
+    </div>
+
+    <script type="text/javascript">
+        // Data
+        const nodesDataFull = [{"id": "prabowo", "label": "prabowo", "count": 258, "betweenness": 0.14087777114092903, "degree": 0.8108108108108109, "community": 2, "color": "#2ecc71"}, {"id": "cawapres", "label": "cawapres", "count": 26, "betweenness": 0.0058476766810100144, "degree": 0.4594594594594595, "community": 1, "color": "#3498db"}, {"id": "debat", "label": "debat", "count": 14, "betweenness": 0.0002866502866502867, "degree": 0.2702702702702703, "community": 1, "color": "#3498db"}, {"id": "bahlil", "label": "bahlil", "count": 6, "betweenness": 0.0, "degree": 0.08108108108108109, "community": 0, "color": "#e74c3c"}, {"id": "najwa shihab", "label": "najwa shihab", "count": 3, "betweenness": 0.0, "degree": 0.02702702702702703, "community": 2, "color": "#2ecc71"}, {"id": "gibran", "label": "gibran", "count": 150, "betweenness": 0.03428515095181761, "degree": 0.6756756756756757, "community": 1, "color": "#3498db"}, {"id": "mahfud", "label": "mahfud", "count": 25, "betweenness": 0.0020550853884187216, "degree": 0.35135135135135137, "community": 1, "color": "#3498db"}, {"id": "jokowi", "label": "jokowi", "count": 267, "betweenness": 0.056629236892394776, "degree": 0.6756756756756757, "community": 0, "color": "#e74c3c"}, {"id": "cak imin", "label": "cak imin", "count": 16, "betweenness": 0.0007161923828590495, "degree": 0.2972972972972973, "community": 1, "color": "#3498db"}, {"id": "anies", "label": "anies", "count": 162, "betweenness": 0.14761949093089444, "degree": 0.8378378378378379, "community": 3, "color": "#f39c12"}, {"id": "koalisi", "label": "koalisi", "count": 16, "betweenness": 0.00886432969766303, "degree": 0.3783783783783784, "community": 0, "color": "#e74c3c"}, {"id": "sby", "label": "sby", "count": 9, "betweenness": 0.0005482456140350876, "degree": 0.10810810810810811, "community": 3, "color": "#f39c12"}, {"id": "ganjar", "label": "ganjar", "count": 58, "betweenness": 0.05974966764440449, "degree": 0.5945945945945946, "community": 3, "color": "#f39c12"}, {"id": "pdip", "label": "pdip", "count": 36, "betweenness": 0.007756635936460498, "degree": 0.35135135135135137, "community": 0, "color": "#e74c3c"}, {"id": "demokrat", "label": "demokrat", "count": 11, "betweenness": 0.0012780637780637778, "degree": 0.13513513513513514, "community": 3, "color": "#f39c12"}, {"id": "nasdem", "label": "nasdem", "count": 14, "betweenness": 0.001001001001001001, "degree": 0.21621621621621623, "community": 0, "color": "#e74c3c"}, {"id": "pilpres", "label": "pilpres", "count": 52, "betweenness": 0.018526237276237274, "degree": 0.5675675675675675, "community": 0, "color": "#e74c3c"}, {"id": "kpu", "label": "kpu", "count": 70, "betweenness": 0.027439741803776892, "degree": 0.5675675675675675, "community": 2, "color": "#2ecc71"}, {"id": "bawaslu", "label": "bawaslu", "count": 13, "betweenness": 0.0, "degree": 0.16216216216216217, "community": 2, "color": "#2ecc71"}, {"id": "pemilu", "label": "pemilu", "count": 90, "betweenness": 0.11534807477789935, "degree": 0.7567567567567568, "community": 1, "color": "#3498db"}, {"id": "kecurangan", "label": "kecurangan", "count": 41, "betweenness": 0.003052018183597131, "degree": 0.32432432432432434, "community": 2, "color": "#2ecc71"}, {"id": "kampanye", "label": "kampanye", "count": 36, "betweenness": 0.000273000273000273, "degree": 0.2702702702702703, "community": 0, "color": "#e74c3c"}, {"id": "muhaimin iskandar", "label": "muhaimin iskandar", "count": 11, "betweenness": 0.000822359155692489, "degree": 0.32432432432432434, "community": 1, "color": "#3498db"}, {"id": "capres", "label": "capres", "count": 37, "betweenness": 0.004167912501245835, "degree": 0.40540540540540543, "community": 0, "color": "#e74c3c"}, {"id": "pan", "label": "pan", "count": 5, "betweenness": 0.00040040040040040036, "degree": 0.13513513513513514, "community": 3, "color": "#f39c12"}, {"id": "roy suryo", "label": "roy suryo", "count": 1, "betweenness": 0.0, "degree": 0.0, "community": 4, "color": "#9b59b6"}, {"id": "curang", "label": "curang", "count": 23, "betweenness": 0.0016470417786207258, "degree": 0.2702702702702703, "community": 2, "color": "#2ecc71"}, {"id": "gerindra", "label": "gerindra", "count": 11, "betweenness": 0.0, "degree": 0.21621621621621623, "community": 1, "color": "#3498db"}, {"id": "golkar", "label": "golkar", "count": 10, "betweenness": 0.011265886814132427, "degree": 0.24324324324324326, "community": 3, "color": "#f39c12"}, {"id": "partai", "label": "partai", "count": 52, "betweenness": 0.0363166467333134, "degree": 0.5675675675675675, "community": 0, "color": "#e74c3c"}, {"id": "surat suara", "label": "surat suara", "count": 6, "betweenness": 0.0, "degree": 0.1891891891891892, "community": 1, "color": "#3498db"}, {"id": "mk", "label": "mk", "count": 42, "betweenness": 0.005229986479986482, "degree": 0.35135135135135137, "community": 0, "color": "#e74c3c"}, {"id": "pks", "label": "pks", "count": 8, "betweenness": 0.00018768768768768769, "degree": 0.16216216216216217, "community": 0, "color": "#e74c3c"}, {"id": "tps", "label": "tps", "count": 4, "betweenness": 0.0, "degree": 0.05405405405405406, "community": 1, "color": "#3498db"}, {"id": "quick count", "label": "quick count", "count": 4, "betweenness": 0.0, "degree": 0.05405405405405406, "community": 3, "color": "#f39c12"}, {"id": "hak angket", "label": "hak angket", "count": 18, "betweenness": 0.0, "degree": 0.21621621621621623, "community": 2, "color": "#2ecc71"}, {"id": "sirekap", "label": "sirekap", "count": 2, "betweenness": 0.0, "degree": 0.02702702702702703, "community": 1, "color": "#3498db"}, {"id": "mahkamah konstitusi", "label": "mahkamah konstitusi", "count": 6, "betweenness": 0.0, "degree": 0.13513513513513514, "community": 0, "color": "#e74c3c"}];
+        const edgesDataFull = [{"from": "prabowo", "to": "cawapres", "value": 9}, {"from": "prabowo", "to": "debat", "value": 5}, {"from": "prabowo", "to": "bahlil", "value": 2}, {"from": "prabowo", "to": "najwa shihab", "value": 2}, {"from": "prabowo", "to": "mahfud", "value": 8}, {"from": "prabowo", "to": "gibran", "value": 76}, {"from": "prabowo", "to": "cak imin", "value": 8}, {"from": "prabowo", "to": "jokowi", "value": 54}, {"from": "prabowo", "to": "ganjar", "value": 20}, {"from": "prabowo", "to": "muhaimin iskandar", "value": 6}, {"from": "prabowo", "to": "anies", "value": 34}, {"from": "prabowo", "to": "kpu", "value": 14}, {"from": "prabowo", "to": "pemilu", "value": 24}, {"from": "prabowo", "to": "capres", "value": 14}, {"from": "prabowo", "to": "kampanye", "value": 9}, {"from": "prabowo", "to": "pilpres", "value": 16}, {"from": "prabowo", "to": "golkar", "value": 3}, {"from": "prabowo", "to": "partai", "value": 12}, {"from": "prabowo", "to": "gerindra", "value": 9}, {"from": "prabowo", "to": "pan", "value": 2}, {"from": "prabowo", "to": "surat suara", "value": 3}, {"from": "prabowo", "to": "koalisi", "value": 10}, {"from": "prabowo", "to": "bawaslu", "value": 4}, {"from": "prabowo", "to": "pdip", "value": 5}, {"from": "prabowo", "to": "pks", "value": 4}, {"from": "prabowo", "to": "nasdem", "value": 2}, {"from": "prabowo", "to": "kecurangan", "value": 5}, {"from": "prabowo", "to": "hak angket", "value": 7}, {"from": "prabowo", "to": "curang", "value": 5}, {"from": "prabowo", "to": "mk", "value": 3}, {"from": "cawapres", "to": "debat", "value": 7}, {"from": "cawapres", "to": "mahfud", "value": 3}, {"from": "cawapres", "to": "gibran", "value": 15}, {"from": "cawapres", "to": "pilpres", "value": 7}, {"from": "cawapres", "to": "cak imin", "value": 3}, {"from": "cawapres", "to": "jokowi", "value": 4}, {"from": "cawapres", "to": "kpu", "value": 4}, {"from": "cawapres", "to": "koalisi", "value": 4}, {"from": "cawapres", "to": "partai", "value": 3}, {"from": "cawapres", "to": "anies", "value": 6}, {"from": "cawapres", "to": "capres", "value": 8}, {"from": "cawapres", "to": "kampanye", "value": 3}, {"from": "cawapres", "to": "pemilu", "value": 5}, {"from": "cawapres", "to": "mk", "value": 2}, {"from": "cawapres", "to": "muhaimin iskandar", "value": 2}, {"from": "cawapres", "to": "gerindra", "value": 2}, {"from": "debat", "to": "gibran", "value": 7}, {"from": "debat", "to": "pilpres", "value": 3}, {"from": "debat", "to": "cak imin", "value": 2}, {"from": "debat", "to": "jokowi", "value": 3}, {"from": "debat", "to": "anies", "value": 2}, {"from": "debat", "to": "pemilu", "value": 2}, {"from": "debat", "to": "capres", "value": 2}, {"from": "debat", "to": "kpu", "value": 2}, {"from": "bahlil", "to": "golkar", "value": 3}, {"from": "bahlil", "to": "partai", "value": 2}, {"from": "gibran", "to": "mahfud", "value": 8}, {"from": "gibran", "to": "cak imin", "value": 8}, {"from": "gibran", "to": "jokowi", "value": 31}, {"from": "gibran", "to": "pilpres", "value": 10}, {"from": "gibran", "to": "kpu", "value": 16}, {"from": "gibran", "to": "ganjar", "value": 10}, {"from": "gibran", "to": "muhaimin iskandar", "value": 4}, {"from": "gibran", "to": "anies", "value": 17}, {"from": "gibran", "to": "pemilu", "value": 17}, {"from": "gibran", "to": "kecurangan", "value": 6}, {"from": "gibran", "to": "kampanye", "value": 7}, {"from": "gibran", "to": "golkar", "value": 2}, {"from": "gibran", "to": "partai", "value": 7}, {"from": "gibran", "to": "gerindra", "value": 4}, {"from": "gibran", "to": "surat suara", "value": 2}, {"from": "gibran", "to": "capres", "value": 7}, {"from": "gibran", "to": "koalisi", "value": 7}, {"from": "gibran", "to": "mk", "value": 3}, {"from": "gibran", "to": "pks", "value": 3}, {"from": "gibran", "to": "hak angket", "value": 3}, {"from": "gibran", "to": "curang", "value": 2}, {"from": "gibran", "to": "pdip", "value": 9}, {"from": "mahfud", "to": "cak imin", "value": 5}, {"from": "mahfud", "to": "jokowi", "value": 7}, {"from": "mahfud", "to": "pilpres", "value": 4}, {"from": "mahfud", "to": "ganjar", "value": 12}, {"from": "mahfud", "to": "muhaimin iskandar", "value": 2}, {"from": "mahfud", "to": "anies", "value": 7}, {"from": "mahfud", "to": "kpu", "value": 5}, {"from": "mahfud", "to": "pemilu", "value": 8}, {"from": "mahfud", "to": "partai", "value": 2}, {"from": "mahfud", "to": "surat suara", "value": 2}, {"from": "jokowi", "to": "cak imin", "value": 4}, {"from": "jokowi", "to": "sby", "value": 2}, {"from": "jokowi", "to": "koalisi", "value": 4}, {"from": "jokowi", "to": "anies", "value": 18}, {"from": "jokowi", "to": "kampanye", "value": 11}, {"from": "jokowi", "to": "mk", "value": 5}, {"from": "jokowi", "to": "ganjar", "value": 8}, {"from": "jokowi", "to": "pilpres", "value": 11}, {"from": "jokowi", "to": "capres", "value": 5}, {"from": "jokowi", "to": "kpu", "value": 10}, {"from": "jokowi", "to": "pemilu", "value": 19}, {"from": "jokowi", "to": "gerindra", "value": 4}, {"from": "jokowi", "to": "pks", "value": 3}, {"from": "jokowi", "to": "nasdem", "value": 3}, {"from": "jokowi", "to": "partai", "value": 15}, {"from": "jokowi", "to": "curang", "value": 3}, {"from": "jokowi", "to": "pdip", "value": 8}, {"from": "jokowi", "to": "bawaslu", "value": 2}, {"from": "jokowi", "to": "kecurangan", "value": 3}, {"from": "jokowi", "to": "mahkamah konstitusi", "value": 2}, {"from": "cak imin", "to": "pilpres", "value": 3}, {"from": "cak imin", "to": "partai", "value": 2}, {"from": "cak imin", "to": "anies", "value": 5}, {"from": "cak imin", "to": "pemilu", "value": 2}, {"from": "cak imin", "to": "ganjar", "value": 2}, {"from": "anies", "to": "sby", "value": 5}, {"from": "anies", "to": "koalisi", "value": 6}, {"from": "anies", "to": "ganjar", "value": 24}, {"from": "anies", "to": "pdip", "value": 9}, {"from": "anies", "to": "demokrat", "value": 6}, {"from": "anies", "to": "muhaimin iskandar", "value": 10}, {"from": "anies", "to": "kpu", "value": 19}, {"from": "anies", "to": "pemilu", "value": 20}, {"from": "anies", "to": "capres", "value": 11}, {"from": "anies", "to": "pilpres", "value": 16}, {"from": "anies", "to": "golkar", "value": 4}, {"from": "anies", "to": "partai", "value": 17}, {"from": "anies", "to": "gerindra", "value": 3}, {"from": "anies", "to": "pan", "value": 3}, {"from": "anies", "to": "surat suara", "value": 2}, {"from": "anies", "to": "kampanye", "value": 6}, {"from": "anies", "to": "nasdem", "value": 8}, {"from": "anies", "to": "pks", "value": 3}, {"from": "anies", "to": "kecurangan", "value": 5}, {"from": "anies", "to": "curang", "value": 4}, {"from": "anies", "to": "tps", "value": 2}, {"from": "anies", "to": "quick count", "value": 2}, {"from": "anies", "to": "hak angket", "value": 2}, {"from": "anies", "to": "mk", "value": 4}, {"from": "koalisi", "to": "pan", "value": 2}, {"from": "koalisi", "to": "partai", "value": 5}, {"from": "koalisi", "to": "capres", "value": 2}, {"from": "koalisi", "to": "pks", "value": 2}, {"from": "koalisi", "to": "muhaimin iskandar", "value": 2}, {"from": "koalisi", "to": "nasdem", "value": 2}, {"from": "koalisi", "to": "pemilu", "value": 5}, {"from": "koalisi", "to": "pilpres", "value": 2}, {"from": "koalisi", "to": "pdip", "value": 2}, {"from": "sby", "to": "ganjar", "value": 3}, {"from": "sby", "to": "demokrat", "value": 5}, {"from": "ganjar", "to": "pdip", "value": 3}, {"from": "ganjar", "to": "demokrat", "value": 4}, {"from": "ganjar", "to": "muhaimin iskandar", "value": 2}, {"from": "ganjar", "to": "kpu", "value": 8}, {"from": "ganjar", "to": "pemilu", "value": 12}, {"from": "ganjar", "to": "capres", "value": 13}, {"from": "ganjar", "to": "pan", "value": 2}, {"from": "ganjar", "to": "pilpres", "value": 4}, {"from": "ganjar", "to": "golkar", "value": 2}, {"from": "ganjar", "to": "surat suara", "value": 2}, {"from": "ganjar", "to": "kecurangan", "value": 2}, {"from": "ganjar", "to": "quick count", "value": 2}, {"from": "ganjar", "to": "curang", "value": 3}, {"from": "ganjar", "to": "hak angket", "value": 2}, {"from": "ganjar", "to": "mk", "value": 2}, {"from": "pdip", "to": "demokrat", "value": 2}, {"from": "pdip", "to": "kampanye", "value": 4}, {"from": "pdip", "to": "kpu", "value": 4}, {"from": "pdip", "to": "partai", "value": 7}, {"from": "pdip", "to": "pemilu", "value": 6}, {"from": "pdip", "to": "mk", "value": 2}, {"from": "pdip", "to": "pilpres", "value": 2}, {"from": "demokrat", "to": "golkar", "value": 2}, {"from": "nasdem", "to": "partai", "value": 6}, {"from": "nasdem", "to": "pks", "value": 2}, {"from": "nasdem", "to": "pemilu", "value": 3}, {"from": "nasdem", "to": "capres", "value": 2}, {"from": "pilpres", "to": "kpu", "value": 5}, {"from": "pilpres", "to": "capres", "value": 8}, {"from": "pilpres", "to": "pemilu", "value": 15}, {"from": "pilpres", "to": "kampanye", "value": 3}, {"from": "pilpres", "to": "muhaimin iskandar", "value": 3}, {"from": "pilpres", "to": "partai", "value": 5}, {"from": "pilpres", "to": "gerindra", "value": 3}, {"from": "pilpres", "to": "kecurangan", "value": 5}, {"from": "pilpres", "to": "mk", "value": 7}, {"from": "pilpres", "to": "mahkamah konstitusi", "value": 2}, {"from": "kpu", "to": "muhaimin iskandar", "value": 3}, {"from": "kpu", "to": "pemilu", "value": 25}, {"from": "kpu", "to": "kecurangan", "value": 14}, {"from": "kpu", "to": "curang", "value": 10}, {"from": "kpu", "to": "partai", "value": 2}, {"from": "kpu", "to": "surat suara", "value": 2}, {"from": "kpu", "to": "capres", "value": 2}, {"from": "kpu", "to": "bawaslu", "value": 4}, {"from": "kpu", "to": "hak angket", "value": 4}, {"from": "kpu", "to": "mk", "value": 5}, {"from": "kpu", "to": "mahkamah konstitusi", "value": 2}, {"from": "bawaslu", "to": "pemilu", "value": 4}, {"from": "bawaslu", "to": "kecurangan", "value": 4}, {"from": "bawaslu", "to": "curang", "value": 3}, {"from": "pemilu", "to": "kecurangan", "value": 21}, {"from": "pemilu", "to": "muhaimin iskandar", "value": 2}, {"from": "pemilu", "to": "capres", "value": 6}, {"from": "pemilu", "to": "curang", "value": 12}, {"from": "pemilu", "to": "golkar", "value": 3}, {"from": "pemilu", "to": "partai", "value": 11}, {"from": "pemilu", "to": "gerindra", "value": 2}, {"from": "pemilu", "to": "surat suara", "value": 3}, {"from": "pemilu", "to": "tps", "value": 3}, {"from": "pemilu", "to": "hak angket", "value": 4}, {"from": "pemilu", "to": "sirekap", "value": 2}, {"from": "pemilu", "to": "kampanye", "value": 2}, {"from": "pemilu", "to": "mk", "value": 4}, {"from": "kecurangan", "to": "curang", "value": 7}, {"from": "kecurangan", "to": "mk", "value": 6}, {"from": "kecurangan", "to": "hak angket", "value": 3}, {"from": "kampanye", "to": "capres", "value": 3}, {"from": "kampanye", "to": "partai", "value": 2}, {"from": "muhaimin iskandar", "to": "partai", "value": 2}, {"from": "muhaimin iskandar", "to": "capres", "value": 3}, {"from": "capres", "to": "partai", "value": 6}, {"from": "pan", "to": "golkar", "value": 2}, {"from": "curang", "to": "hak angket", "value": 5}, {"from": "gerindra", "to": "partai", "value": 4}, {"from": "golkar", "to": "partai", "value": 4}, {"from": "partai", "to": "mk", "value": 2}, {"from": "partai", "to": "mahkamah konstitusi", "value": 3}, {"from": "mk", "to": "mahkamah konstitusi", "value": 4}];
+        
+        let network = null;
+        let nodesDataset = null;
+        let edgesDataset = null;
+        
+        function initNetwork() {
+            const container = document.getElementById('mynetwork');
+            
+            nodesDataset = new vis.DataSet();
+            edgesDataset = new vis.DataSet();
+            
+            const data = {
+                nodes: nodesDataset,
+                edges: edgesDataset
+            };
+            
+            const options = {
+                nodes: {
+                    shape: 'dot',
+                    font: {
+                        size: 14,
+                        face: 'Arial'
+                    },
+                    borderWidth: 2,
+                    borderWidthSelected: 4
+                },
+                edges: {
+                    smooth: {
+                        type: 'continuous',
+                        forceDirection: 'none'
+                    },
+                    color: {
+                        color: '#cccccc',
+                        highlight: '#667eea'
+                    }
+                },
+                physics: {
+                    enabled: true,
+                    forceAtlas2Based: {
+                        gravitationalConstant: -2000,
+                        centralGravity: 0.01,
+                        springLength: 150,
+                        springConstant: 0.05,
+                        damping: 0.4,
+                        avoidOverlap: 0.5
+                    },
+                    solver: 'forceAtlas2Based',
+                    stabilization: {
+                        enabled: true,
+                        iterations: 1500,
+                        updateInterval: 50,
+                        onlyDynamicEdges: false,
+                        fit: true
+                    },
+                    adaptiveTimestep: true
+                },
+                interaction: {
+                    hover: true,
+                    tooltipDelay: 100,
+                    navigationButtons: true,
+                    keyboard: true
+                }
+            };
+            
+            network = new vis.Network(container, data, options);
+            
+            // Event handlers
+            network.on("click", function(params) {
+                if (params.nodes.length > 0) {
+                    showNodeInfo(params.nodes[0]);
+                } else {
+                    hideNodeInfo();
+                }
+            });
+            
+            network.on("hoverNode", function(params) {
+                document.body.style.cursor = 'pointer';
+            });
+            
+            network.on("blurNode", function() {
+                document.body.style.cursor = 'default';
+            });
+            
+            // Auto-disable physics after stabilization - network starts paused
+            network.once("stabilizationIterationsDone", function() {
+                // Immediately disable physics after initial layout
+                network.setOptions({ physics: false });
+                console.log("Network stabilized - physics disabled (paused by default)");
+                updatePhysicsButton(false);
+            });
+            
+            network.on("stabilizationProgress", function(params) {
+                const progress = Math.round((params.iterations / params.total) * 100);
+                console.log("Stabilizing: " + progress + "%");
+            });
+            
+            updateNetwork();
+        }
+        
+        function updateNetwork() {
+            const nodeSizing = document.getElementById('nodeSizing').value;
+            const minNodeSize = parseInt(document.getElementById('minNodeSize').value);
+            const edgeWidthFactor = parseFloat(document.getElementById('edgeWidth').value);
+            const minMentions = parseInt(document.getElementById('minMentions').value);
+            const selectedCommunities = Array.from(document.getElementById('communityFilter').selectedOptions).map(o => parseInt(o.value));
+            
+            // Filter nodes
+            const filteredNodes = nodesDataFull.filter(node => 
+                node.count >= minMentions && selectedCommunities.includes(node.community)
+            );
+            
+            // Calculate node sizes
+            const processedNodes = filteredNodes.map(node => {
+                let size;
+                if (nodeSizing === 'count') {
+                    size = minNodeSize + (node.count * 1.5);
+                } else if (nodeSizing === 'betweenness') {
+                    size = minNodeSize + (node.betweenness * 200);
+                } else if (nodeSizing === 'degree') {
+                    size = minNodeSize + (node.degree * 50);
+                } else {
+                    size = 20;
+                }
+                
+                return {
+                    id: node.id,
+                    label: node.label,
+                    size: Math.max(size, minNodeSize),
+                    color: node.color,
+                    title: `${node.label}
+Mentions: ${node.count}
+Betweenness: ${node.betweenness.toFixed(3)}
+Community: ${node.community}`,
+                    ...node
+                };
+            });
+            
+            // Filter edges
+            const nodeIds = new Set(processedNodes.map(n => n.id));
+            const filteredEdges = edgesDataFull.filter(edge => 
+                nodeIds.has(edge.from) && nodeIds.has(edge.to)
+            ).map(edge => ({
+                ...edge,
+                width: edge.value * edgeWidthFactor
+            }));
+            
+            // Update datasets
+            nodesDataset.clear();
+            edgesDataset.clear();
+            nodesDataset.add(processedNodes);
+            edgesDataset.add(filteredEdges);
+            
+            // Update stats
+            document.getElementById('stats-nodes').textContent = processedNodes.length;
+            document.getElementById('stats-edges').textContent = filteredEdges.length;
+            
+            // Update physics
+            updatePhysics();
+        }
+        
+        function updatePhysics() {
+            const solver = document.getElementById('solver').value;
+            const springLength = parseInt(document.getElementById('springLength').value);
+            const springConstant = parseFloat(document.getElementById('springConstant').value);
+            const gravitationalConstant = parseInt(document.getElementById('gravitationalConstant').value);
+            const centralGravity = parseFloat(document.getElementById('centralGravity').value);
+            
+            let physicsOptions = {
+                enabled: true,
+                stabilization: {
+                    iterations: 1000
+                }
+            };
+            
+            if (solver === 'barnesHut') {
+                physicsOptions.barnesHut = {
+                    gravitationalConstant: gravitationalConstant,
+                    centralGravity: centralGravity,
+                    springLength: springLength,
+                    springConstant: springConstant,
+                    damping: 0.09,
+                    avoidOverlap: 0.5
+                };
+                physicsOptions.solver = 'barnesHut';
+            } else if (solver === 'forceAtlas2Based') {
+                physicsOptions.forceAtlas2Based = {
+                    gravitationalConstant: gravitationalConstant,
+                    centralGravity: centralGravity,
+                    springLength: springLength,
+                    springConstant: springConstant,
+                    damping: 0.4,
+                    avoidOverlap: 0.5
+                };
+                physicsOptions.solver = 'forceAtlas2Based';
+            } else {
+                physicsOptions.repulsion = {
+                    centralGravity: centralGravity,
+                    springLength: springLength,
+                    springConstant: springConstant,
+                    nodeDistance: 200,
+                    damping: 0.09
+                };
+                physicsOptions.solver = 'repulsion';
+            }
+            
+            network.setOptions({ physics: physicsOptions });
+        }
+        
+        function resetView() {
+            network.fit();
+        }
+        
+        function fitNetwork() {
+            network.fit({
+                animation: {
+                    duration: 1000,
+                    easingFunction: 'easeInOutQuad'
+                }
+            });
+        }
+        
+        function showNodeInfo(nodeId) {
+            const node = nodesDataFull.find(n => n.id === nodeId);
+            if (!node) return;
+            
+            const panel = document.getElementById('info-panel');
+            document.getElementById('info-title').textContent = node.label;
+            document.getElementById('info-content').innerHTML = `
+                <div class="info-row"><span class="info-label">Mentions:</span> ${node.count}</div>
+                <div class="info-row"><span class="info-label">Betweenness:</span> ${node.betweenness.toFixed(4)}</div>
+                <div class="info-row"><span class="info-label">Degree Centrality:</span> ${node.degree.toFixed(4)}</div>
+                <div class="info-row"><span class="info-label">Community:</span> ${node.community}</div>
+            `;
+            panel.style.display = 'block';
+        }
+        
+        function hideNodeInfo() {
+            document.getElementById('info-panel').style.display = 'none';
+        }
+        
+        function togglePhysics() {
+            const currentState = network.physics.physicsEnabled;
+            network.setOptions({ physics: !currentState });
+            updatePhysicsButton(!currentState);
+        }
+        
+        function updatePhysicsButton(enabled) {
+            const button = document.getElementById('physics-toggle');
+            if (enabled) {
+                button.textContent = '⏸️ Pause Physics';
+                button.style.background = '#667eea';
+            } else {
+                button.textContent = '▶️ Resume Physics';
+                button.style.background = '#2ecc71';
+            }
+        }
+        
+        // Range input value displays
+        document.getElementById('springLength').oninput = function() {
+            document.getElementById('spring-val').textContent = this.value;
+        };
+        document.getElementById('springConstant').oninput = function() {
+            document.getElementById('spring-str-val').textContent = this.value;
+        };
+        document.getElementById('gravitationalConstant').oninput = function() {
+            document.getElementById('repulsion-val').textContent = this.value;
+        };
+        document.getElementById('centralGravity').oninput = function() {
+            document.getElementById('gravity-val').textContent = this.value;
+        };
+        document.getElementById('minNodeSize').oninput = function() {
+            document.getElementById('min-size-val').textContent = this.value;
+        };
+        document.getElementById('edgeWidth').oninput = function() {
+            document.getElementById('edge-val').textContent = this.value;
+        };
+        document.getElementById('minMentions').oninput = function() {
+            document.getElementById('min-mentions-val').textContent = this.value;
+        };
+        
+        function toggleInfoDrawer() {
+            const drawer = document.getElementById('info-drawer');
+            const btn = document.getElementById('info-toggle-btn');
+            
+            drawer.classList.toggle('open');
+            btn.classList.toggle('drawer-open');
+        }
+        
+        // Initialize
+        initNetwork();
+    </script>
+
+    <!-- Info Drawer -->
+    <button id="info-toggle-btn" onclick="toggleInfoDrawer()">📊</button>
+    
+    <div id="info-drawer">
+        <div id="info-drawer-header">
+            <h2>📋 Analysis Report</h2>
+            <button id="info-drawer-close" onclick="toggleInfoDrawer()">✕</button>
+        </div>
+        <div id="info-drawer-content">
+            <h2>Text Network Analysis Summary</h2>
+
+<h3>Overview</h3>
+This analysis examined <strong>hoax documents from 2024</strong> across three categories to identify key entities, relationships, and narrative structures through co-occurrence network analysis:
+<ul>
+<li><strong>Politics</strong>: 1,358 documents</li>
+<li><strong>Scam</strong>: 939 documents</li>
+<li><strong>Others</strong>: 1,449 documents</li>
+</ul>
+
+<hr>
+
+<h2>Category 1: Politics Network</h2>
+
+<h3>Network Statistics</h3>
+<ul>
+<li><strong>Total Documents Analyzed</strong>: 1,358</li>
+<li><strong>Unique Entities</strong>: 38</li>
+<li><strong>Total Connections (Edges)</strong>: 227</li>
+<li><strong>Network Density</strong>: 0.323 (highly connected)</li>
+<li><strong>Communities Detected</strong>: 5</li>
+<li><strong>Average Clustering</strong>: 0.722 (strong local clustering)</li>
+</ul>
+
+<h4>Top 10 Bridge Words (Betweenness Centrality)</h4>
+
+These entities act as "bridges" connecting different hoax narratives:
+
+| Rank | Entity | Betweenness | Mentions | Role |
+|------|--------|-------------|----------|------|
+| 1 | <strong>Anies</strong> | 0.148 | 162 | Primary bridge between opposition narratives |
+| 2 | <strong>Prabowo</strong> | 0.141 | 258 | Most mentioned, bridges election and government themes |
+| 3 | <strong>Pemilu</strong> (Election) | 0.115 | 90 | Central theme connecting all narratives |
+| 4 | <strong>Ganjar</strong> | 0.060 | 58 | Bridges PDIP and opposition narratives |
+| 5 | <strong>Jokowi</strong> | 0.057 | 267 | Second most mentioned, connects government narratives |
+| 6 | <strong>Partai</strong> (Party) | 0.036 | 52 | Bridges political party discussions |
+| 7 | <strong>Gibran</strong> | 0.034 | 150 | Connects dynastic politics and nepotism themes |
+| 8 | <strong>KPU</strong> | 0.027 | 70 | Bridges election fraud allegations |
+| 9 | <strong>Pilpres</strong> (Presidential Election) | 0.019 | 52 | Electoral process narratives |
+| 10 | <strong>Golkar</strong> | 0.011 | 10 | Coalition building narratives |
+
+<h4>Most Mentioned Entities</h4>
+
+| Entity | Count | Context |
+|--------|-------|---------|
+| Jokowi | 267 | President, government policies, influence |
+| Prabowo | 258 | Presidential candidate, military background |
+| Anies | 162 | Presidential candidate, opposition figure |
+| Gibran | 150 | Vice presidential candidate, nepotism allegations |
+| Pemilu | 90 | Election process, fraud allegations |
+
+<h3>Community Structure</h3>
+
+The network reveals <strong>5 distinct narrative communities</strong>:
+
+<h4><strong>Community 0: Government & Institutional Politics</strong> (12 entities)</h4>
+Core entities: `Jokowi`, `Capres`, `PDIP`, `MK`, `Partai`, `Koalisi`
+
+<strong>Narrative Focus</strong>: Government influence, institutional manipulation, coalition politics, constitutional court decisions
+
+<h4><strong>Community 1: Electoral Process & Debate</strong> (11 entities)</h4>
+Core entities: `Gibran`, `Pemilu`, `Cawapres`, `Debat`, `TPS`, `Surat Suara`, `Sirekap`
+
+<strong>Narrative Focus</strong>: Election mechanics, debate controversies, vote counting, electoral fraud allegations
+
+<h4><strong>Community 2: Election Fraud & Oversight</strong> (7 entities)</h4>
+Core entities: `Prabowo`, `KPU`, `Bawaslu`, `Kecurangan`, `Curang`
+
+<strong>Narrative Focus</strong>: Electoral fraud allegations, oversight body failures, cheating claims
+
+<h4><strong>Community 3: Opposition Candidates</strong> (7 entities)</h4>
+Core entities: `Anies`, `Ganjar`, `Demokrat`, `SBY`, `Quick Count`
+
+<strong>Narrative Focus</strong>: Opposition candidates, coalition shifts, polling data
+
+<h4><strong>Community 4: Media Critics</strong> (1 entity)</h4>
+Core entity: `Roy Suryo`
+
+<strong>Narrative Focus</strong>: Media criticism, technical analysis controversies
+
+<h3>Key Insights</h3>
+
+<h4>1. <strong>Central Figures in Hoax Narratives</strong></h4>
+<ul>
+<li><strong>Prabowo</strong> and <strong>Jokowi</strong> are the most mentioned (258 and 267 respectively)</li>
+<li><strong>Anies</strong> has the highest betweenness centrality (0.148), making him the primary "bridge" between different hoax themes</li>
+</ul>
+
+<h4>2. <strong>Narrative Bridges</strong></h4>
+The analysis identifies terms that connect disparate hoax themes:
+<ul>
+<li><strong>"Pemilu"</strong> bridges election fraud and candidate attack narratives</li>
+<li><strong>"Anies"</strong> connects opposition politics with electoral fraud claims</li>
+<li><strong>"Gibran"</strong> links nepotism allegations with government influence narratives</li>
+</ul>
+
+<h4>3. <strong>Distinct Narrative Communities</strong></h4>
+<ul>
+<li>Government influence narratives (Jokowi, institutions)</li>
+<li>Electoral process controversies (debates, vote counting)</li>
+<li>Fraud allegations (KPU, Bawaslu failures)</li>
+<li>Opposition candidate attacks</li>
+<li>Media criticism</li>
+</ul>
+
+<h4>4. **Network Density</h4>
+**
+<ul>
+<li>Very high network density (0.323) indicates highly interconnected narratives</li>
+<li>Average clustering of 0.722 shows strong local clustering within communities</li>
+<li>Suggests coordinated messaging patterns across political hoax themes</li>
+</ul>
+
+<h3>Research Questions Answered</h3>
+
+<h4>Q1: What are the most central entities?</h4>
+<strong>Answer</strong>: Jokowi (267 mentions) and Prabowo (258) are most frequently mentioned, but <strong>Anies</strong> (betweenness: 0.148) serves as the primary structural bridge.
+
+<h4>Q2: Which terms act as "bridges"?</h4>
+<strong>Answer</strong>: 
+<ul>
+<li><strong>Anies</strong>: Bridges opposition and fraud narratives</li>
+<li><strong>Prabowo</strong>: Connects election and government themes</li>
+<li><strong>Pemilu</strong>: Central hub for all electoral narratives</li>
+</ul>
+
+<h4>Q3: Are there distinct narrative communities?</h4>
+<strong>Answer</strong>: Yes, 5 communities detected:
+1. Government influence
+2. Electoral process
+3. Fraud allegations
+4. Opposition candidates
+5. Media criticism
+
+<h4>Q4: What bigrams reveal coordinated patterns?</h4>
+<strong>Answer</strong>: Key political bigrams identified:
+<ul>
+<li>"Surat Suara" (ballot papers)</li>
+<li>"Cak Imin" (VP candidate)</li>
+<li>"Quick Count" (polling)</li>
+<li>"Hak Angket" (parliamentary inquiry)</li>
+<li>"Mahkamah Konstitusi" (Constitutional Court)</li>
+</ul>
+
+<h3>Implications</h3>
+
+1. <strong>Hoax narratives are highly interconnected</strong>, suggesting coordinated messaging
+2. <strong>Anies serves as the focal point</strong> for opposition-related hoaxes despite not being the most mentioned
+3. <strong>Electoral fraud allegations</strong> form a distinct but connected narrative cluster
+4. <strong>Gibran's inclusion</strong> created a new sub-theme around dynastic politics and nepotism
+
+<h3>Files Generated</h3>
+
+<strong>Politics Network:</strong>
+<ul>
+<li>`politics/top_entities.csv` - Complete entity rankings</li>
+<li>`politics/network_graph.pkl` - Network graph</li>
+<li>`politics/network_metadata.json` - All metrics</li>
+</ul>
+
+<strong>Scam Network:</strong>
+<ul>
+<li>`scam/top_entities.csv` - Complete entity rankings</li>
+<li>`scam/network_graph.pkl` - Network graph</li>
+<li>`scam/network_metadata.json` - All metrics</li>
+</ul>
+
+<strong>Others Network:</strong>
+<ul>
+<li>`others/top_entities.csv` - Complete entity rankings</li>
+<li>`others/network_graph.pkl` - Network graph</li>
+<li>`others/network_metadata.json` - All metrics</li>
+</ul>
+
+<strong>Visualizations:</strong>
+<ul>
+<li>`multi_category_network.html` - Interactive tabbed visualization (all categories)</li>
+<li>`full_network.html` - Single category visualization</li>
+<li>`bridge_words_chart.png` - Betweenness centrality chart</li>
+<li>`top_entities_chart.png` - Most mentioned entities chart</li>
+</ul>
+
+<hr>
+
+<h2>Category 2: Scam Network</h2>
+
+<h3>Network Statistics</h3>
+<ul>
+<li><strong>Total Documents Analyzed</strong>: 939</li>
+<li><strong>Documents with Entities</strong>: 578</li>
+<li><strong>Unique Entities</strong>: 37</li>
+<li><strong>Total Connections (Edges)</strong>: 251 (highest among all categories)</li>
+<li><strong>Network Density</strong>: 0.378 (very highly connected)</li>
+<li><strong>Communities Detected</strong>: 6</li>
+<li><strong>Average Clustering</strong>: 0.784</li>
+</ul>
+
+<h3>Top 10 Bridge Words (Betweenness Centrality)</h3>
+
+| Rank | Entity | Betweenness | Mentions | Role |
+|------|--------|-------------|----------|------|
+| 1 | <strong>Penipuan</strong> (Scam) | 0.110 | 109 | Primary bridge connecting all scam types |
+| 2 | <strong>Facebook</strong> | 0.069 | 134 | Most mentioned, bridges social media scams |
+| 3 | <strong>Lowongan</strong> (Job Vacancy) | 0.065 | 71 | Bridges employment scams |
+| 4 | <strong>Gratis</strong> (Free) | 0.061 | 86 | Connects giveaway and promotion scams |
+| 5 | <strong>Modus</strong> (Method) | 0.039 | 84 | Bridges scam methodologies |
+| 6 | <strong>WhatsApp</strong> | 0.028 | 147 | Most mentioned platform, connects messaging scams |
+| 7 | <strong>Instagram</strong> | 0.026 | 78 | Bridges visual platform scams |
+| 8 | <strong>TikTok</strong> | 0.019 | 68 | Connects video platform scams |
+| 9 | <strong>Hadiah</strong> (Prize) | 0.015 | 115 | Bridges prize/lottery scams |
+| 10 | <strong>Rekrutmen</strong> (Recruitment) | 0.015 | 28 | Connects fake recruitment scams |
+
+<h3>Most Mentioned Entities</h3>
+
+| Entity | Count | Context |
+|--------|-------|---------|
+| WhatsApp | 147 | Messaging platform for scams |
+| Facebook | 134 | Social media scam distribution |
+| Hadiah (Prize) | 115 | Lottery/prize scams |
+| Penipuan (Scam) | 109 | General scam term |
+| Bank | 108 | Banking-related scams |
+
+<h3>Community Structure (6 Communities)</h3>
+
+<h4><strong>Community 0: Banking & Financial Scams</strong> (11 entities)</h4>
+Core entities: `Facebook`, `Hadiah`, `Bank`, `Rekening`, `BNI`, `BRI`, `Mandiri`, `Undian`, `Transfer`
+
+<strong>Narrative Focus</strong>: Bank account scams, fake lotteries, fund transfers, prize giveaways through social media
+
+<h4><strong>Community 1: Employment & Promotion Scams</strong> (13 entities)</h4>
+Core entities: `Lowongan`, `Gratis`, `Modus`, `WhatsApp`, `TikTok`, `Rekrutmen`, `BPJS`, `Loker`, `BUMN`, `Pulsa`, `PLN`
+
+<strong>Narrative Focus</strong>: Fake job vacancies, recruitment scams, free promotions, utility company impersonation
+
+<h4><strong>Community 2: Social Media Impersonation</strong> (6 entities)</h4>
+Core entities: `Penipuan`, `Instagram`, `Dana`, `Akun Palsu`, `Bansos`, `Penipu`
+
+<strong>Narrative Focus</strong>: Fake accounts, social assistance scams, e-wallet fraud
+
+<h4><strong>Community 3-5: Isolated Scam Types</strong></h4>
+<ul>
+<li>GoPay scams (1 entity)</li>
+<li>OVO scams (1 entity)</li>
+<li>BLT (cash assistance) scams (1 entity)</li>
+</ul>
+
+<h3>Key Insights - Scam Network</h3>
+
+<h4>1. <strong>Platform Centrality</strong></h4>
+<ul>
+<li><strong>WhatsApp</strong> (147) and <strong>Facebook</strong> (134) dominate as scam distribution channels</li>
+<li>Social media platforms form interconnected network of scam distribution</li>
+<li><strong>Penipuan</strong> acts as central hub connecting all scam categories</li>
+</ul>
+
+<h4>2. <strong>Scam Themes</strong></h4>
+<ul>
+<li><strong>Banking scams</strong>: Focus on fake accounts, lottery, and fund transfers</li>
+<li><strong>Employment scams</strong>: Fake job vacancies in government agencies (BUMN, PLN, Pertamina)</li>
+<li><strong>Social assistance scams</strong>: Impersonation for BPJS, Bansos, BLT</li>
+</ul>
+
+<h4>3. <strong>Network Characteristics</strong></h4>
+<ul>
+<li><strong>Highest edge count</strong> (251) shows complex interconnections between scam types</li>
+<li>Very high density (0.378) indicates scams often combine multiple themes</li>
+<li>6 communities show diverse but connected scam methodologies</li>
+</ul>
+
+<h4>4. <strong>Scam Evolution</strong></h4>
+<ul>
+<li>Traditional banking scams (BRI, BNI, Mandiri) still prevalent</li>
+<li>E-wallet scams emerging (Dana, GoPay, OVO) but less connected</li>
+<li>Job recruitment scams heavily target government agencies</li>
+</ul>
+
+<hr>
+
+<h2>Category 3: Others Network</h2>
+
+<h3>Network Statistics</h3>
+<ul>
+<li><strong>Total Documents Analyzed</strong>: 1,449</li>
+<li><strong>Documents with Entities</strong>: 590</li>
+<li><strong>Unique Entities</strong>: 29</li>
+<li><strong>Total Connections (Edges)</strong>: 96</li>
+<li><strong>Network Density</strong>: 0.237 (moderate connectivity)</li>
+<li><strong>Communities Detected</strong>: 4</li>
+<li><strong>Average Clustering</strong>: 0.618</li>
+</ul>
+
+<h3>Top 10 Bridge Words (Betweenness Centrality)</h3>
+
+| Rank | Entity | Betweenness | Mentions | Role |
+|------|--------|-------------|----------|------|
+| 1 | <strong>Amerika</strong> (America) | 0.104 | 47 | Primary bridge in international news |
+| 2 | <strong>AS</strong> (USA) | 0.064 | 18 | Connects geopolitical narratives |
+| 3 | <strong>Israel</strong> | 0.051 | 64 | Bridges Middle East conflict narratives |
+| 4 | <strong>Rumah Sakit</strong> (Hospital) | 0.043 | 25 | Connects health and disaster narratives |
+| 5 | <strong>Perang</strong> (War) | 0.026 | 14 | Bridges conflict narratives |
+| 6 | <strong>Kesehatan</strong> (Health) | 0.015 | 72 | Most mentioned, connects health topics |
+| 7 | <strong>Bencana</strong> (Disaster) | 0.014 | 90 | Most mentioned overall, disaster narratives |
+| 8 | <strong>Vaksin</strong> (Vaccine) | 0.009 | 56 | Bridges COVID-related narratives |
+| 9 | <strong>COVID</strong> | 0.009 | 47 | Pandemic-related hoaxes |
+| 10 | <strong>Virus</strong> | 0.008 | 32 | Disease narratives |
+
+<h3>Most Mentioned Entities</h3>
+
+| Entity | Count | Context |
+|--------|-------|---------|
+| Gempa (Earthquake) | 97 | Natural disaster hoaxes |
+| Bencana (Disaster) | 90 | General disaster narratives |
+| Kesehatan (Health) | 72 | Health misinformation |
+| Israel | 64 | Middle East conflict |
+| Vaksin (Vaccine) | 56 | Vaccination misinformation |
+
+<h3>Community Structure (4 Communities)</h3>
+
+<h4><strong>Community 0: International Conflicts & Geopolitics</strong> (11 entities)</h4>
+Core entities: `Amerika`, `AS`, `Israel`, `Rumah Sakit`, `Perang`, `Rusia`, `Gaza`, `Hamas`, `Palestina`, `China`, `Ukraina`
+
+<strong>Narrative Focus</strong>: Middle East conflict (Israel-Palestine), Russia-Ukraine war, US-China relations, war crimes, hospital attacks
+
+<h4><strong>Community 1: Health & Pandemic</strong> (9 entities)</h4>
+Core entities: `Kesehatan`, `Vaksin`, `COVID`, `Virus`, `WHO`, `Obat`, `RS`, `Pandemi`, `Kemenkes`
+
+<strong>Narrative Focus</strong>: COVID-19 misinformation, vaccine hesitancy, alternative medicine, WHO conspiracy theories
+
+<h4><strong>Community 2: Natural Disasters</strong> (8 entities)</h4>
+Core entities: `Bencana`, `Gunung`, `Gempa`, `Banjir`, `BMKG`, `Tsunami`, `Longsor`, `Erupsi`
+
+<strong>Narrative Focus</strong>: Earthquake predictions, tsunami warnings, volcanic eruptions, flooding, landslides
+
+<h4><strong>Community 3: Isolated Health Topics</strong></h4>
+Core entity: `Ivermectin`
+
+<strong>Narrative Focus</strong>: COVID alternative treatment misinformation
+
+<h3>Key Insights - Others Network</h3>
+
+<h4>1. <strong>Dual Focus: International & Domestic</strong></h4>
+<ul>
+<li><strong>International</strong>: Israel-Palestine conflict dominates geopolitical hoaxes</li>
+<li><strong>Domestic</strong>: Natural disasters (earthquakes, floods) most frequently mentioned</li>
+<li><strong>Amerika</strong> serves as bridge between international narratives</li>
+</ul>
+
+<h4>2. <strong>Health Misinformation</strong></h4>
+<ul>
+<li>COVID-19 and vaccine skepticism remain prevalent</li>
+<li>WHO conspiracy theories connect to broader health misinformation</li>
+<li>Ivermectin narratives isolated from main health cluster</li>
+</ul>
+
+<h4>3. <strong>Network Characteristics</strong></h4>
+<ul>
+<li><strong>Lower density</strong> (0.237) compared to politics and scam</li>
+<li>Reflects more diverse, less coordinated hoax themes</li>
+<li>4 communities show distinct topic separation</li>
+</ul>
+
+<h4>4. <strong>Disaster Hoaxes</strong></h4>
+<ul>
+<li>Natural disaster predictions most common (gempa: 97 mentions)</li>
+<li>BMKG frequently mentioned in false disaster warnings</li>
+<li>Disaster hoaxes often combine multiple natural events</li>
+</ul>
+
+<h3>Cross-Category Comparison</h3>
+
+| Metric | Politics | Scam | Others |
+|--------|----------|------|--------|
+| Documents | 1,358 | 939 | 1,449 |
+| Entities | 38 | 37 | 29 |
+| Edges | 227 | 251 | 96 |
+| Density | 0.323 | 0.378 | 0.237 |
+| Communities | 5 | 6 | 4 |
+| Theme | Elections, candidates | Financial fraud | Health, disasters, conflicts |
+| Coordination | High | Very High | Moderate |
+
+<strong>Key Observation</strong>: Scam networks show highest interconnectedness, suggesting scammers use multiple platforms and methods simultaneously. Politics shows coordinated messaging. Others category is more fragmented with distinct topic clusters.
+
+<hr>
+
+<h2>Methodology</h2>
+
+<h3>Methodology</h3>
+<ul>
+<li><strong>Data Source</strong>: 1,358 political hoax articles from 2024</li>
+<li><strong>Entity Extraction</strong>: Predefined political entities matched in NARASI text</li>
+<li><strong>Network Construction</strong>: Co-occurrence within same document</li>
+<li><strong>Minimum Co-occurrence</strong>: 2 (edge threshold)</li>
+<li><strong>Centrality Metrics</strong>: Degree, Betweenness, Eigenvector, PageRank</li>
+<li><strong>Community Detection</strong>: Greedy Modularity algorithm</li>
+</ul>
+
+<h3>Next Steps for Analysis</h3>
+
+1. ✅ Temporal analysis of entity mentions over time
+2. ✅ Bigram analysis for key political phrases
+3. ⬜ Sentiment analysis correlation with centrality
+4. ⬜ Cross-reference with topic modeling results
+5. ⬜ Investigate narrative evolution across communities
+
+        </div>
+    </div>
+
+</body>
+</html>

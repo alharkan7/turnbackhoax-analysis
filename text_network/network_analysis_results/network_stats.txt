@@ -1,0 +1,9 @@
+Network Statistics
+==================================================
+
+total_documents: 1358
+unique_entities: 38
+total_edges: 227
+network_density: 0.3229018492176387
+num_communities: 5
+avg_clustering: 0.7221562644845825
