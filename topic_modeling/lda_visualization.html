@@ -20,47 +20,172 @@
             background-color: #f8f9fa;
         }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 20px;
+        /* Cover Page */
+        .cover-page {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            border-radius: 12px;
+            padding: 60px 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e0e0;
+        }
+
+        .cover-content {
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            color: #2c3e50;
+            max-width: 900px;
         }
 
-        .hero h1 {
-            font-size: 3em;
+        .cover-title {
+            font-size: 3.5em;
             font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 24px;
+            line-height: 1.2;
+            color: #1a1a1a;
         }
 
-        .hero .subtitle {
-            font-size: 1.3em;
-            opacity: 0.95;
-            margin-bottom: 15px;
+        .cover-subtitle {
+            font-size: 1.5em;
+            margin-bottom: 35px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: #555;
         }
 
-        .hero .meta {
+        .cover-project-info {
+            margin-bottom: 50px;
             font-size: 1em;
-            opacity: 0.85;
+            border-top: 2px solid #e0e0e0;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 20px 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #666;
+        }
+
+        .cover-project-info p {
+            margin-bottom: 8px;
+            line-height: 1.8;
+        }
+
+        .cover-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .cover-stat-item {
+            text-align: center;
+        }
+
+        .cover-stat-number {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+
+        .cover-stat-label {
+            font-size: 1em;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .cover-meta {
+            margin-bottom: 50px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .cover-meta p {
+            margin-bottom: 8px;
+        }
+
+        .cover-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cover-button {
+            padding: 16px 32px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: none;
+        }
+
+        .cover-button.primary {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .cover-button.primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .cover-button.secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .cover-button.secondary:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
         }
 
         /* Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            min-height: calc(100vh - 140px);
+        }
+
+        #cover {
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+        }
+
+        .main-tab-content:not(#cover) {
+            padding: 40px 20px 60px 20px;
+            background-color: #f8f9fa;
         }
 
         /* Section */
         section {
             background: white;
-            margin: 40px auto;
-            padding: 50px;
+            padding: 40px 50px;
             border-radius: 12px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-tab-content > section {
+            margin-top: 0;
+        }
+
+        .sub-tab-content > div {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         section h2 {
@@ -76,6 +201,14 @@
             color: #764ba2;
             margin-top: 35px;
             margin-bottom: 15px;
+        }
+
+        section h4 {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         section p {
@@ -176,48 +309,119 @@
             background-color: #f9f9f9;
         }
 
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 0;
-            border-bottom: 3px solid #e0e0e0;
-            background-color: white;
-            padding: 15px 20px 0 20px;
-            flex-wrap: wrap;
+        /* Main Navigation Tabs */
+        .main-tabs {
+            background: white;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #e0e0e0;
         }
 
-        .tab-button {
-            padding: 14px 32px;
+        .main-tabs-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            padding: 0 20px;
+            scrollbar-width: thin;
+        }
+
+        .main-tabs-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .main-tabs-container::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .main-tab-button {
+            padding: 18px 24px;
             border: none;
             background-color: transparent;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             color: #666;
-            border-bottom: 4px solid transparent;
+            border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
-            border-radius: 6px 6px 0 0;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .tab-button:hover {
+        .main-tab-button:hover {
+            color: #667eea;
             background-color: #f8f9fa;
-            color: #333;
         }
 
-        .tab-button.active {
+        .main-tab-button.active {
             color: #667eea;
             border-bottom-color: #667eea;
             background-color: #f8f9fa;
         }
 
-        .tab-content {
+        .main-tab-content {
             display: none;
-            background-color: white;
-            padding: 40px;
+            animation: fadeIn 0.3s ease;
         }
 
-        .tab-content.active {
+        .main-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sub Tabs */
+        .sub-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 30px 0 20px 0;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0;
+        }
+
+        .sub-tab-button {
+            padding: 12px 24px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .sub-tab-button:hover {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .sub-tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background-color: #f8f9fa;
+        }
+
+        .sub-tab-content {
+            display: none;
+            padding: 30px 0;
+        }
+
+        .sub-tab-content.active {
             display: block;
         }
 
@@ -338,10 +542,77 @@
             color: #667eea;
         }
 
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .back-to-top.show {
+            display: flex;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
+            .cover-title {
                 font-size: 2em;
+            }
+
+            .cover-subtitle {
+                font-size: 1.1em;
+                margin-bottom: 25px;
+            }
+
+            .cover-project-info {
+                font-size: 0.95em;
+                padding: 15px 0;
+                margin-bottom: 35px;
+            }
+
+            .cover-stats {
+                gap: 30px;
+            }
+
+            .cover-stat-number {
+                font-size: 2.5em;
+            }
+
+            .cover-stat-label {
+                font-size: 0.9em;
+            }
+
+            .cover-meta {
+                font-size: 1em;
+            }
+
+            .cover-page {
+                min-height: 70vh;
+                padding: 40px 20px;
+            }
+
+            .cover-button {
+                padding: 14px 24px;
+                font-size: 1em;
             }
 
             section {
@@ -354,6 +625,16 @@
 
             .viz-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .main-tab-button {
+                padding: 14px 16px;
+                font-size: 13px;
+            }
+
+            .sub-tab-button {
+                padding: 10px 16px;
+                font-size: 14px;
             }
         }
 
@@ -381,15 +662,67 @@
 </head>
 
 <body>
-    <!-- Hero Section -->
-    <div class="hero">
-        <h1>🔍 LDA Topic Modeling Analysis</h1>
-        <p class="subtitle">Mapping Misinformation Narratives in Indonesia's 2024 Election</p>
-        <p class="meta">3,746 Hoax Documents from TurnBackHoax.id | 22 Identified Topics | November 2025</p>
-    </div>
+    <!-- Main Navigation -->
+    <nav class="main-tabs">
+        <div class="main-tabs-container">
+            <button class="main-tab-button active" onclick="openMainTab(event, 'cover')">Start</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'summary')">Summary</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'methodology')">Methodology</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'dataset')">Dataset</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'interactive')">Visualization</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'results')">Results</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'findings')">Findings</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'quality')">Model</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'recommendations')">Recommendations</button>
+            <button class="main-tab-button" onclick="openMainTab(event, 'appendix')">Appendix</button>
+        </div>
+    </nav>
 
     <div class="container">
-        <!-- Executive Summary -->
+        <!-- Tab 0: Cover Page -->
+        <div id="cover" class="main-tab-content active">
+            <div class="cover-page">
+                <div class="cover-content">
+                    <h1 class="cover-title">The Dynamics of Hoaxes in Indonesia</h1>
+                    <p class="cover-subtitle">Topic Modeling Analysis of TurnBackHoax.id Data in 2024</p>
+                    <div class="cover-project-info">
+                        <p><strong>Course:</strong> Digital Research Methods</p>
+                        <p><strong>Instructor:</strong> Dr. Eriyanto</p>
+                        <p><strong>By:</strong> Ali Al Harkan (2406480304)</p>
+                    </div>
+                    <div class="cover-stats">
+                        <div class="cover-stat-item">
+                            <div class="cover-stat-number">3,746</div>
+                            <div class="cover-stat-label">Hoax Documents</div>
+                        </div>
+                        <div class="cover-stat-item">
+                            <div class="cover-stat-number">22</div>
+                            <div class="cover-stat-label">Topics Identified</div>
+                        </div>
+                        <div class="cover-stat-item">
+                            <div class="cover-stat-number">3</div>
+                            <div class="cover-stat-label">Categories</div>
+                        </div>
+                    </div>
+                    <div class="cover-meta">
+                        <p>Data Source: <strong>TurnBackHoax.id</strong></p>
+                        <p>Analysis Period: <strong>2024 Indonesian Presidential Election</strong></p>
+                        <p>Date: <strong>November 2025</strong></p>
+                    </div>
+                    <div class="cover-actions">
+                        <button class="cover-button primary" onclick="switchToTab('summary')">
+                            Analysis
+                        </button>
+                        <button class="cover-button secondary" onclick="switchToTab('interactive')">
+                            Visualization
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 1: Executive Summary -->
+        <div id="summary" class="main-tab-content">
         <section id="executive-summary">
             <h2>Executive Summary</h2>
 
@@ -443,9 +776,11 @@
                     policy discussions.</p>
             </div>
         </section>
+        </div>
 
-        <!-- Methodology -->
-        <section id="methodology">
+        <!-- Tab 2: Methodology -->
+        <div id="methodology" class="main-tab-content">
+        <section>
             <h2>Methodology</h2>
 
             <h3>Data Collection & Preparation</h3>
@@ -484,9 +819,11 @@
                 attacks.
             </div>
         </section>
+        </div>
 
-        <!-- Dataset Overview -->
-        <section id="dataset-overview">
+        <!-- Tab 3: Dataset Overview -->
+        <div id="dataset" class="main-tab-content">
+        <section>
             <h2>Dataset Overview</h2>
 
             <table>
@@ -539,9 +876,11 @@
                 <li><strong>Disasters & Events (Others-2):</strong> 263 docs (7%) - Natural disaster misinformation</li>
             </ol>
         </section>
+        </div>
 
-        <!-- Interactive Exploration -->
-        <section id="interactive">
+        <!-- Tab 4: Interactive Exploration -->
+        <div id="interactive" class="main-tab-content">
+        <section>
             <h2>Interactive Topic Exploration</h2>
 
             <p>Use the tabs below to explore pyLDAvis interactive visualizations for each category. Each circular
@@ -554,20 +893,20 @@
                 term frequency vs. topic specificity.
             </div>
 
-            <div class="tabs">
-                <button class="tab-button active" onclick="openTab(event, 'politics')">
+            <div class="sub-tabs">
+                <button class="sub-tab-button active" onclick="openSubTab(event, 'politics-viz', 'interactive')">
                     🏛️ Politics (10 Topics)
                 </button>
-                <button class="tab-button" onclick="openTab(event, 'scam')">
+                <button class="sub-tab-button" onclick="openSubTab(event, 'scam-viz', 'interactive')">
                     ⚠️ Scam (5 Topics)
                 </button>
-                <button class="tab-button" onclick="openTab(event, 'others')">
+                <button class="sub-tab-button" onclick="openSubTab(event, 'others-viz', 'interactive')">
                     📰 Others (7 Topics)
                 </button>
             </div>
 
-            <!-- Politics Tab -->
-            <div id="politics" class="tab-content active">
+            <!-- Politics Sub-Tab -->
+            <div id="politics-viz" class="sub-tab-content active">
                 <h3>Politics Category: 2024 Election Narratives</h3>
                 <p><strong>1,358 political hoax documents</strong> analyzed. Topics identified include candidate
                     attacks, election fraud narratives, foreign interference conspiracies, and institutional distrust
@@ -595,8 +934,8 @@
                 <div id="ldavis-politics"></div>
             </div>
 
-            <!-- Scam Tab -->
-            <div id="scam" class="tab-content">
+            <!-- Scam Sub-Tab -->
+            <div id="scam-viz" class="sub-tab-content">
                 <h3>Scam Category: Fraudulent Schemes</h3>
                 <p><strong>939 scam-related hoaxes</strong> analyzed. Topics include fake job offers, lottery scams,
                     banking phishing, government aid fraud, and celebrity deepfake endorsements.</p>
@@ -623,8 +962,8 @@
                 <div id="ldavis-scam"></div>
             </div>
 
-            <!-- Others Tab -->
-            <div id="others" class="tab-content">
+            <!-- Others Sub-Tab -->
+            <div id="others-viz" class="sub-tab-content">
                 <h3>Others Category: Health, Disasters, Religion</h3>
                 <p><strong>1,449 miscellaneous hoaxes</strong> analyzed. Topics include natural disasters, COVID-19
                     vaccines, food safety scares, religious content, celebrity news, and conspiracy theories.</p>
@@ -651,9 +990,29 @@
                 <div id="ldavis-others"></div>
             </div>
         </section>
+        </div>
 
-        <!-- Category Results -->
-        <section id="politics-results">
+        <!-- Tab 5: Detailed Results -->
+        <div id="results" class="main-tab-content">
+        <section>
+            <h2>Detailed Results by Category</h2>
+            <p>Explore in-depth analysis, visualizations, and key topics for each category.</p>
+
+            <div class="sub-tabs">
+                <button class="sub-tab-button active" onclick="openSubTab(event, 'politics-results', 'results')">
+                    🏛️ Politics
+                </button>
+                <button class="sub-tab-button" onclick="openSubTab(event, 'scam-results', 'results')">
+                    ⚠️ Scam
+                </button>
+                <button class="sub-tab-button" onclick="openSubTab(event, 'others-results', 'results')">
+                    📰 Others
+                </button>
+            </div>
+
+            <!-- Politics Results Sub-Tab -->
+            <div id="politics-results" class="sub-tab-content active">
+            <div>
             <h2>🏛️ Politics Category: Detailed Results</h2>
 
             <p>The political hoax landscape is dominated by <strong>candidate-specific character attacks (44%)</strong>,
@@ -727,9 +1086,12 @@
                 <h4>Topic Word Clouds</h4>
                 <img src="visualizations/wordclouds.png" alt="Politics Word Clouds">
             </div>
-        </section>
+            </div>
+            </div>
 
-        <section id="scam-results">
+            <!-- Scam Results Sub-Tab -->
+            <div id="scam-results" class="sub-tab-content">
+            <div>
             <h2>⚠️ Scam Category: Detailed Results</h2>
 
             <p>Scam hoaxes overwhelmingly target <strong>job seekers (60%)</strong> through fake recruitment and
@@ -801,9 +1163,12 @@
                 <h4>Topic Word Clouds</h4>
                 <img src="scam_category/visualizations/wordclouds.png" alt="Scam Word Clouds">
             </div>
-        </section>
+            </div>
+            </div>
 
-        <section id="others-results">
+            <!-- Others Results Sub-Tab -->
+            <div id="others-results" class="sub-tab-content">
+            <div>
             <h2>📰 Others Category: Detailed Results</h2>
 
             <p>The Others category achieved the <strong>highest coherence score (0.461)</strong>, indicating these
@@ -871,10 +1236,14 @@
                 <h4>Topic Word Clouds</h4>
                 <img src="others_category/visualizations/wordclouds.png" alt="Others Word Clouds">
             </div>
+            </div>
+            </div>
         </section>
+        </div>
 
-        <!-- Key Findings -->
-        <section id="key-findings">
+        <!-- Tab 6: Key Findings & Implications -->
+        <div id="findings" class="main-tab-content">
+        <section>
             <h2>Key Findings & Implications</h2>
 
             <h3>1. Electoral Polarization Through Character Attacks</h3>
@@ -914,9 +1283,11 @@
                 Indonesian democracy: candidate delegitimization, institutional erosion, and nationalist mobilization.
             </div>
         </section>
+        </div>
 
-        <!-- Model Quality -->
-        <section id="model-quality">
+        <!-- Tab 7: Model Quality & Validation -->
+        <div id="quality" class="main-tab-content">
+        <section>
             <h2>Model Quality & Validation</h2>
 
             <h3>Coherence Score Analysis</h3>
@@ -972,9 +1343,11 @@
                     languages</li>
             </ul>
         </section>
+        </div>
 
-        <!-- Next Steps -->
-        <section id="next-steps">
+        <!-- Tab 8: Recommendations & Next Steps -->
+        <div id="recommendations" class="main-tab-content">
+        <section>
             <h2>Recommendations & Next Steps</h2>
 
             <h3>For Researchers</h3>
@@ -1014,18 +1387,22 @@
             </ol>
 
             <div class="nav-pills">
-                <a href="#interactive" class="nav-pill">Explore Interactive Visualizations</a>
-                <a href="#politics-results" class="nav-pill">Politics Deep Dive</a>
-                <a href="#scam-results" class="nav-pill">Scam Analysis</a>
-                <a href="#others-results" class="nav-pill">Others Category</a>
+                <a href="javascript:void(0)" onclick="switchToTab('interactive')" class="nav-pill">Explore Interactive Visualizations</a>
+                <a href="javascript:void(0)" onclick="switchToTab('results')" class="nav-pill">View Detailed Results</a>
+                <a href="javascript:void(0)" onclick="switchToTab('findings')" class="nav-pill">Key Findings</a>
+                <a href="javascript:void(0)" onclick="switchToTab('appendix')" class="nav-pill">View Appendix</a>
             </div>
         </section>
+        </div>
 
-        <!-- Technical Details -->
-        <section id="technical">
-            <h2>Technical Specifications</h2>
+        <!-- Tab 9: Appendix -->
+        <div id="appendix" class="main-tab-content">
+        <section>
+            <h2>Appendix</h2>
 
-            <h3>Software Stack</h3>
+            <h3>A. Technical Specifications</h3>
+
+            <h4>Software Stack</h4>
             <ul>
                 <li><strong>LDA Implementation:</strong> gensim 4.4.0</li>
                 <li><strong>Indonesian NLP:</strong> Sastrawi 1.0.1 (stemming), NLTK 3.8.0</li>
@@ -1034,11 +1411,11 @@
                 <li><strong>Categorization:</strong> Google Gemini 2.5 Flash (LLM)</li>
             </ul>
 
-            <h3>Reproducibility</h3>
+            <h4>Reproducibility</h4>
             <p>All models trained with <code>random_state=42</code> for reproducibility. Complete code, data, and models
                 available in the project repository.</p>
 
-            <h3>Files Generated</h3>
+            <h4>Files Generated</h4>
             <ul>
                 <li>9 trained LDA models (.pkl) - 3 configurations × 3 categories</li>
                 <li>3 dictionaries (.pkl) - one per category</li>
@@ -1047,29 +1424,29 @@
                 <li>1 combined interactive visualization (this page)</li>
             </ul>
 
-            <h3>Computational Resources</h3>
+            <h4>Computational Resources</h4>
             <p>Analysis completed on standard hardware (no GPU required). Training time: ~5 minutes per category (15
                 minutes total). Preprocessing: ~2 minutes per category.</p>
-        </section>
 
-        <!-- About -->
-        <section id="about">
-            <h2>About This Analysis</h2>
+            <h3>B. About This Analysis</h3>
 
-            <p><strong>Analyst:</strong> Research conducted as part of Digital Research Methods course (UAS Project)</p>
+            <p><strong>Project Title:</strong> The Dynamics of Hoaxes in Indonesia: Topic Modeling Analysis of TurnBackHoax.id Data in 2024</p>
+            <p><strong>Researcher:</strong> Ali Al Harkan (2406480304)</p>
+            <p><strong>Course:</strong> Digital Research Methods (Metode Riset Digital)</p>
+            <p><strong>Instructor:</strong> Dr. Eriyanto</p>
             <p><strong>Date:</strong> November 24, 2025</p>
             <p><strong>Data Source:</strong> <a href="https://turnbackhoax.id" target="_blank">TurnBackHoax.id</a>
                 (MAFINDO)</p>
             <p><strong>Context:</strong> 2024 Indonesian Presidential Election period</p>
 
-            <h3>Acknowledgments</h3>
+            <h4>Acknowledgments</h4>
             <p>This analysis is based on fact-checking work by <strong>MAFINDO (Masyarakat Anti Fitnah
                     Indonesia)</strong>, Indonesia's first anti-hoax community. Their tireless efforts to combat
                 misinformation make research like this possible.</p>
 
-            <h3>Citation</h3>
+            <h4>Citation</h4>
             <p>If using this analysis, please cite:<br>
-                <code>Topic Modeling Analysis of Indonesian Election Misinformation (2024). Dataset: TurnBackHoax.id, 3,746 documents. Method: LDA with Indonesian text preprocessing.</code>
+                <code>Al Harkan, A. (2025). The Dynamics of Hoaxes in Indonesia: Topic Modeling Analysis of TurnBackHoax.id Data in 2024. Digital Research Methods Course Project. Dataset: TurnBackHoax.id, 3,746 documents. Method: LDA with Indonesian text preprocessing.</code>
             </p>
 
             <div class="alert alert-info">
@@ -1077,13 +1454,17 @@
                 please reach out through the course instructor.
             </div>
         </section>
+        </div>
     </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 
     <!-- Footer -->
     <div class="footer">
-        <p>&copy; 2025 Indonesian Election Misinformation Analysis | Data from <a href="https://turnbackhoax.id"
+        <p>&copy; 2025 Ali Al Harkan | Indonesian Election Misinformation Analysis | Data from <a href="https://turnbackhoax.id"
                 target="_blank">TurnBackHoax.id</a></p>
-        <p>Part of Digital Research Methods Course - Topic Modeling Study</p>
+        <p>Digital Research Methods - Final Exam Research Project | Instructor: Dr. Eriyanto</p>
     </div>
 
     <!-- Scripts -->
@@ -1091,16 +1472,16 @@
     <script src="https://cdn.jsdelivr.net/gh/bmabey/pyLDAvis@3.4.0/pyLDAvis/js/ldavis.v3.0.0.js"></script>
 
     <script>
-        // Tab switching function
-        function openTab(evt, tabName) {
-            // Hide all tab contents
-            var tabContents = document.getElementsByClassName("tab-content");
+        // Main tab switching function
+        function openMainTab(evt, tabName) {
+            // Hide all main tab contents
+            var tabContents = document.getElementsByClassName("main-tab-content");
             for (var i = 0; i < tabContents.length; i++) {
                 tabContents[i].classList.remove("active");
             }
 
-            // Remove active class from all buttons
-            var tabButtons = document.getElementsByClassName("tab-button");
+            // Remove active class from all main tab buttons
+            var tabButtons = document.getElementsByClassName("main-tab-button");
             for (var i = 0; i < tabButtons.length; i++) {
                 tabButtons[i].classList.remove("active");
             }
@@ -1108,7 +1489,74 @@
             // Show the selected tab and mark button as active
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Sub-tab switching function
+        function openSubTab(evt, tabName, parentTab) {
+            // Get parent container
+            var parent = document.getElementById(parentTab);
+            
+            // Hide all sub-tab contents within this parent
+            var subTabContents = parent.getElementsByClassName("sub-tab-content");
+            for (var i = 0; i < subTabContents.length; i++) {
+                subTabContents[i].classList.remove("active");
+            }
+
+            // Remove active class from all sub-tab buttons within this parent
+            var subTabButtons = parent.getElementsByClassName("sub-tab-button");
+            for (var i = 0; i < subTabButtons.length; i++) {
+                subTabButtons[i].classList.remove("active");
+            }
+
+            // Show the selected sub-tab and mark button as active
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Helper function to switch tabs programmatically
+        function switchToTab(tabName) {
+            // Find the button for this tab
+            var buttons = document.getElementsByClassName("main-tab-button");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            
+            // Hide all tabs
+            var tabs = document.getElementsByClassName("main-tab-content");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            // Show the target tab
+            document.getElementById(tabName).classList.add("active");
+            
+            // Find and activate the corresponding button
+            var targetButton = document.querySelector(`[onclick*="'${tabName}'"]`);
+            if (targetButton) {
+                targetButton.classList.add("active");
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Back to top functionality
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show/hide back to top button on scroll
+        window.addEventListener('scroll', function() {
+            var backToTop = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
 
         // Smooth scrolling for nav pills
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
