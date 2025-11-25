@@ -85,7 +85,7 @@ nltk.download('stopwords')
 ├── Scraping turnbackhoax.id - Complete.csv  # Raw scraped dataset (3,746 articles)
 │
 ├── data_prep/                          # Data preparation and preprocessing
-│   ├── [scraping_notebook.ipynb]     # Initial web scraping from turnbackhoax.id
+│   ├── Scraping_Turn_Back_Hoax.ipynb  # Initial web scraping from turnbackhoax.id
 │   ├── categorize_hoaxes.py           # LLM-based categorization
 │   ├── add_llm_category.py            # Add categories to dataset
 │   ├── clean_columns.py               # Data cleaning utilities
@@ -131,20 +131,46 @@ nltk.download('stopwords')
 
 ### 0. Data Collection (Initial Scraping)
 
-The raw dataset was collected through web scraping from [turnbackhoax.id](http://turnbackhoax.id):
+The initial data was collected using a Jupyter notebook that scrapes [turnbackhoax.id](http://turnbackhoax.id):
 
-**Output:**
+**Notebook:** `data_prep/Scraping_Turn_Back_Hoax.ipynb`
+
+The scraping process consists of three steps:
+
+1. **Scraping Headlines** (Pages 39-226)
+   - Extracts: Title, URL, Preview, Image URL, Date, Author
+   - Scraped 3,760 article headlines
+   - Output: `turnbackhoax_data_[timestamp].csv`
+
+2. **Scraping Full Content**
+   - Extracts complete article content and category from each URL
+   - Uses cleaned HTML parsing to extract readable text
+   - Output: `turnbackhoax_articles_[timestamp].csv`
+
+3. **Content Cleansing**
+   - Formats text with proper paragraph separation
+   - Processes special characters and delimiters
+   - Final output: `Scraping turnbackhoax.id - Complete.csv`
+
+**To run the scraper:**
+```bash
+# Open the notebook in Jupyter or Google Colab
+jupyter notebook data_prep/Scraping_Turn_Back_Hoax.ipynb
+
+# Run all cells sequentially
+# Note: Full scraping takes ~2-3 hours depending on connection speed
+```
+
+**Requirements for scraping:**
+- `requests`, `beautifulsoup4`, `pandas`, `tqdm`
+- Respectful scraping with 1-second delay between requests
+
+**Final Output:**
 - `Scraping turnbackhoax.id - Complete.csv` - Complete scraped dataset containing:
   - URL, Title, Category, Topic, Date, Author
   - Content (hoax text and fact-check explanation)
-  - Image URL, ID
+  - Image URL, ID, LLM Category
   - 3,746 fact-checked hoax articles from 2024
-
-**Note**: If there's a Jupyter notebook for the scraping process in `data_prep/`, you can run it to update or re-scrape the data. The scraping notebook typically collects:
-- Article metadata (title, date, author, category)
-- Full content text (HOAX_TEXT and fact-check narratives)
-- References and source URLs
-- Images and supporting media
 
 ### 1. Data Preparation
 
@@ -253,9 +279,11 @@ python visualize_topics.py
 
 ### Data Source
 - **Platform**: [turnbackhoax.id](http://turnbackhoax.id) (MAFINDO)
+- **Collection Method**: Web scraping using BeautifulSoup (see `Scraping_Turn_Back_Hoax.ipynb`)
 - **Period**: January - December 2024
 - **Total Documents**: 3,746 hoax articles
 - **Categories**: Politics (1,358), Scam (939), Others (1,449)
+- **Scraped Fields**: URL, Title, Category, Date, Author, Content, Image URL
 
 ### Analysis Pipeline
 
@@ -311,22 +339,38 @@ python visualize_topics.py
 ## 📚 Dependencies
 
 ```
+# Core data processing
 pandas>=2.0.0
+numpy>=1.24.0
+
+# Web scraping
+requests>=2.28.0
+beautifulsoup4>=4.11.0
+tqdm>=4.65.0
+
+# LLM and AI
 google-generativeai
+transformers>=4.30.0
+torch>=2.0.0
 python-dotenv
+
+# Topic modeling
 gensim>=4.3.0
 pyLDAvis>=3.4.0
+
+# Indonesian NLP
 Sastrawi>=1.2.0
 nltk>=3.8.0
+
+# Visualization
 matplotlib>=3.7.0
 seaborn>=0.12.0
 wordcloud>=1.9.0
-scipy>=1.11.0
-numpy>=1.24.0
-transformers>=4.30.0
-torch>=2.0.0
+
+# Network analysis
 networkx>=3.0
 pyvis>=0.3.0
+scipy>=1.11.0
 ```
 
 ## 🎓 Research Applications
