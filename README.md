@@ -82,12 +82,16 @@ nltk.download('stopwords')
 
 ```
 .
+├── Scraping turnbackhoax.id - Complete.csv  # Raw scraped dataset (3,746 articles)
+│
 ├── data_prep/                          # Data preparation and preprocessing
+│   ├── [scraping_notebook.ipynb]     # Initial web scraping from turnbackhoax.id
 │   ├── categorize_hoaxes.py           # LLM-based categorization
 │   ├── add_llm_category.py            # Add categories to dataset
 │   ├── clean_columns.py               # Data cleaning utilities
 │   ├── extract_content.py             # Content extraction
-│   └── prepare_topic_modeling_data.py # Prepare data for LDA
+│   ├── prepare_topic_modeling_data.py # Prepare data for LDA
+│   └── categorized_hoaxes.csv         # Processed dataset with LLM categories
 │
 ├── sentiment_analysis/                 # Sentiment analysis module
 │   ├── sentiment_analysis.py          # Main sentiment analysis script
@@ -124,6 +128,23 @@ nltk.download('stopwords')
 ```
 
 ## 🚀 Usage
+
+### 0. Data Collection (Initial Scraping)
+
+The raw dataset was collected through web scraping from [turnbackhoax.id](http://turnbackhoax.id):
+
+**Output:**
+- `Scraping turnbackhoax.id - Complete.csv` - Complete scraped dataset containing:
+  - URL, Title, Category, Topic, Date, Author
+  - Content (hoax text and fact-check explanation)
+  - Image URL, ID
+  - 3,746 fact-checked hoax articles from 2024
+
+**Note**: If there's a Jupyter notebook for the scraping process in `data_prep/`, you can run it to update or re-scrape the data. The scraping notebook typically collects:
+- Article metadata (title, date, author, category)
+- Full content text (HOAX_TEXT and fact-check narratives)
+- References and source URLs
+- Images and supporting media
 
 ### 1. Data Preparation
 
@@ -238,14 +259,45 @@ python visualize_topics.py
 
 ### Analysis Pipeline
 
-1. **Data Collection**: Web-scraped hoax articles and fact-check reports
+1. **Data Collection**: Web scraping hoax articles and fact-check reports from turnbackhoax.id
+   - Source: MAFINDO's fact-checking platform
+   - Fields: URL, Title, Category, Content, Date, Author, Images
+   - Output: `Scraping turnbackhoax.id - Complete.csv`
+   
 2. **Preprocessing**: Text cleaning, tokenization, stopword removal (Sastrawi)
+   - Indonesian-specific text normalization
+   - Remove punctuation, numbers, special characters
+   - Sastrawi stemmer for Indonesian language
+   
 3. **Categorization**: LLM-based classification using Google Gemini
+   - Automated categorization into Politics, Scam, Others
+   - Prompt engineering for accurate classification
+   - Output: `categorized_hoaxes.csv`
+   
 4. **Sentiment Analysis**: Indonesian RoBERTa model for sentiment classification
+   - Model: `w11wo/indonesian-roberta-base-sentiment-classifier`
+   - Labels: Positive, Negative, Neutral
+   - Entity-level sentiment aggregation
+   
 5. **Entity Extraction**: Keyword-based entity identification and matching
+   - Predefined dictionaries for Politics, Scam, Others categories
+   - Pattern matching in HOAX_TEXT content
+   - Co-occurrence tracking
+   
 6. **Network Construction**: Co-occurrence networks with minimum threshold
+   - Nodes: Entities (politicians, platforms, topics)
+   - Edges: Co-occurrence within same document
+   - Minimum threshold: 2 co-occurrences
+   
 7. **Community Detection**: Greedy modularity optimization
+   - Identify narrative clusters and themes
+   - Calculate centrality metrics (degree, betweenness, eigenvector, PageRank)
+   - Detect bridge entities connecting different narratives
+   
 8. **Topic Modeling**: LDA with coherence score optimization
+   - Models trained with 5, 7, and 10 topics
+   - Optimal model selected by coherence score
+   - pyLDAvis for interactive visualization
 
 ### Technical Stack
 
