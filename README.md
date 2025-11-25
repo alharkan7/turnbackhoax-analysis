@@ -16,6 +16,22 @@ The 2024 Indonesian General Election marked a critical moment for understanding 
 
 This analysis leverages data from **MAFINDO** (Masyarakat Antifitnah Indonesia), Indonesia's leading fact-checking organization, which has documented hoaxes since 2016 through their [turnbackhoax.id](http://turnbackhoax.id) platform.
 
+## 🔗 Results
+
+Explore the interactive analysis results:
+
+### **Topic Modeling**
+
+https://www.raihankalla.id/turnbackhoax-analysis
+
+### **Text Network Analysis**
+
+https://www.raihankalla.id/turnbackhoax-text-network
+
+### **Sentiment Analysis**
+
+https://www.raihankalla.id/turnbackhoax-sentiment-analysis
+
 ## 🎯 Key Features
 
 - **Multi-Category Analysis**: Automated LLM-based categorization of hoaxes into Politics, Scam, and Others
