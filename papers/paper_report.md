@@ -440,13 +440,9 @@ Kedua, analisis ini tidak dapat mengidentifikasi aktor atau jaringan di balik pr
 
 Ketiga, studi ini tidak mengukur dampak kausal *hoax* terhadap sikap atau perilaku pemilih. Desain eksperimental atau *quasi-experimental* diperlukan untuk mengisolasi efek paparan *hoax* dari faktor konfounding lainnya.
 
-# **KESIMPULAN DAN REKOMENDASI**
-
-Penelitian ini mengungkapkan bahwa *hoax* politik Indonesia pada tahun 2024 bukan sekadar produk sampingan dari kompetisi elektoral, melainkan instrumen strategis yang secara sistematis mengeksploitasi psikologi moral masyarakat Indonesia untuk mencapai tujuan politik. Melalui analisis komputasional terhadap 3.760 artikel cek fakta dari turnbackhoax.id, penelitian ini mengidentifikasi pola-pola kritis yang menandai era baru dalam dinamika misinformasi politik Indonesia.
-
 ## **Jawaban Terhadap Pertanyaan Penelitian**
 
-Sebelum menyajikan kesimpulan utama, penelitian ini perlu menjawab secara eksplisit ketiga pertanyaan penelitian yang diajukan di awal:
+Berdasarkan analisis yang telah dilakukan, penelitian ini menjawab ketiga pertanyaan penelitian sebagai berikut:
 
 ### Pertanyaan Penelitian 1: Kelompok Tematik Dominan dalam *Hoax* Indonesia 2024
 
@@ -466,6 +462,18 @@ Penelitian ini membatasi analisis mendalam pada domain politik (1.358 dokumen) m
 
 Dalam domain politik, penelitian ini mengidentifikasi eksploitasi predominan landasan pengikatan (*binding foundations*)—*Ingroup/Loyalty* (Kesetiaan Kelompok), *Authority/Respect* (Otoritas/Penghormatan), dan *Purity/Sanctity* (Kemurnian/Kesucian)—yang konsisten dengan karakteristik masyarakat Indonesia yang kolektivistik dan religius. Landasan *Fairness/Reciprocity* (Keadilan/Resiprositas) juga dieksploitasi secara strategis melalui narasi penyalahgunaan anggaran dan manipulasi pemilu. Analisis mendalam tentang variasi pembingkaian moral antar domain merupakan agenda penting untuk penelitian lanjutan dan menjadi salah satu limitasi utama penelitian ini.
 
+# **KESIMPULAN DAN REKOMENDASI**
+
+Penelitian ini mengungkapkan bahwa *hoax* politik Indonesia pada tahun 2024 bukan sekadar produk sampingan dari kompetisi elektoral, melainkan instrumen strategis yang secara sistematis mengeksploitasi psikologi moral masyarakat Indonesia untuk mencapai tujuan politik. Melalui analisis komputasional terhadap 3.760 artikel cek fakta dari turnbackhoax.id, penelitian ini mengidentifikasi pola-pola kritis yang menandai era baru dalam dinamika misinformasi politik Indonesia.
+
+## **Ringkasan Jawaban Pertanyaan Penelitian**
+
+Terkait **kelompok tematik dominan** (Pertanyaan 1), pemodelan LDA mengidentifikasi 10 topik dengan dua tema utama: serangan terhadap Anies Baswedan (449 dokumen, 33,1%) dan narasi dinasti Jokowi-Prabowo-Gibran (146 dokumen, 10,8%). *Hoax* terkonsentrasi di tiga periode kritis yang sejalan dengan siklus politik 2024.
+
+Mengenai **target dan strategi linguistik** (Pertanyaan 2), terdapat pola penargetan asimetris ekstrem dengan rasio 3:1 terhadap kandidat oposisi. Lima strategi linguistik teridentifikasi: pembingkaian ambiguitas, manipulasi identitas visual, invokasi ancaman eksternal, penggunaan bahasa informal, dan integrasi narasi konspirasi global.
+
+Untuk **variasi pembingkaian moral antar domain** (Pertanyaan 3), analisis terbatas pada domain politik mengungkapkan dominasi landasan pengikatan (*Ingroup/Loyalty*, *Authority/Respect*, *Purity/Sanctity*) yang konsisten dengan karakteristik masyarakat Indonesia yang kolektivistik. Analisis komparatif antar domain menjadi agenda penelitian lanjutan.
+
 ## **Kesimpulan Utama**
 
 Berdasarkan temuan empiris dan interpretasi teoritis yang telah dipaparkan, penelitian ini menghasilkan tiga kesimpulan utama:
@@ -482,95 +490,15 @@ Ketidakseimbangan ini tidak dapat dijelaskan semata-mata sebagai hasil dari mina
 
 Fragmentasi narasi institusional ini mencerminkan strategi delegitimasi yang lebih berbahaya dibandingkan serangan elektoral temporal. Sementara serangan terhadap kandidat akan kehilangan relevansi pasca-pemilu, erosi kepercayaan terhadap institusi demokrasi memiliki efek jangka panjang yang dapat melemahkan konsolidasi demokrasi Indonesia dan menciptakan ruang bagi alternatif otoritarian.
 
-## **Kontribusi Teoritis**
+## **Rekomendasi**
 
-Penelitian ini memberikan beberapa kontribusi terhadap pengembangan teori pembingkaian moral dan studi misinformasi:
+Berdasarkan temuan penelitian, beberapa rekomendasi kebijakan dan praktis dapat diajukan. **Bagi pemerintah dan regulator**, diperlukan penguatan regulasi berbasis bukti yang menyeimbangkan perlindungan terhadap misinformasi dengan kebebasan berekspresi, termasuk kewajiban transparansi iklan politik di media sosial dan mekanisme *rapid response* untuk *debunking* *hoax* di periode kritis. Program literasi digital perlu diperluas dengan integrasi pemahaman tentang psikologi moral—bagaimana landasan moral dieksploitasi untuk mengaktifkan respon emosional dan mengapa konten bermuatan moral lebih mudah dipercaya. Penguatan kapasitas institusi pemeriksa fakta seperti MAFINDO juga krusial, termasuk pendanaan yang stabil, pelatihan metodologi lanjutan, dan infrastruktur teknologi untuk deteksi otomatis *hoax*.
 
-**Pertama**, penelitian ini mendemonstrasikan penerapan *Moral Foundations Theory* pada konteks non-Barat dengan basis data empiris yang substansial (1.358 dokumen *hoax* politik), memperluas validitas ekologis teori yang sebagian besar dikembangkan dan diuji dalam konteks Amerika Serikat dan Eropa. Temuan tentang dominasi landasan pengikatan dalam *hoax* Indonesia mengkonfirmasi prediksi teoritis tentang variasi kultural dalam psikologi moral dan menggarisbawahi perlunya adaptasi strategi *counter-misinformation* berdasarkan profil moral populasi target.
+**Bagi platform media sosial**, perlu dilakukan evaluasi desain algoritma rekomendasi yang saat ini memprioritaskan *engagement* tanpa membedakan diskusi konstruktif dan penyebaran misinformasi. Modifikasi algoritmik yang mengurangi amplifikasi konten bermuatan moral-emosional tinggi, meningkatkan promosi sumber kredibel, dan implementasi *friction* sederhana sebelum berbagi konten dapat mengurangi penyebaran misinformasi secara signifikan. Platform juga perlu meningkatkan transparansi tentang kampanye disinformasi terkoordinasi (*Coordinated Inauthentic Behavior*) dengan mempublikasikan metrik CIB dan bekerjasama dengan peneliti independen untuk audit kebijakan.
 
-**Kedua**, penelitian ini mengintegrasikan pendekatan *computational text analysis* (pemodelan topik LDA) dengan kerangka teoritis pembingkaian moral, menunjukkan bahwa metode pembelajaran mesin tanpa pengawasan dapat mengidentifikasi pola pembingkaian moral dalam korpus teks skala besar tanpa memerlukan anotasi manual yang memakan waktu. Metodologi ini dapat diadopsi untuk analisis misinformasi di konteks bahasa dan negara lain, memperluas skalabilitas penelitian misinformasi komparatif.
+**Bagi organisasi masyarakat sipil dan pemeriksa fakta**, strategi *debunking* perlu disesuaikan dengan profil moral audiens—menggunakan *moral reframing* yang menekankan landasan moral yang sama dengan *hoax* yang dibantah. Strategi *prebunking* juga perlu diprioritaskan, memperingatkan masyarakat tentang jenis *hoax* yang kemungkinan beredar di periode kritis untuk menciptakan "antibodi kognitif" yang membuat individu lebih resisten terhadap misinformasi.
 
-**Ketiga**, penelitian ini menyediakan dokumentasi sistematis tentang lanskap *hoax* Indonesia pada tahun pemilu kritis, menciptakan *baseline* empiris untuk penelitian longitudinal tentang evolusi strategi disinformasi dan efektivitas intervensi *counter-misinformation* di masa mendatang.
-
-## **Rekomendasi Kebijakan dan Praktis**
-
-Berdasarkan temuan dan kesimpulan di atas, penelitian ini mengajukan rekomendasi kebijakan dan praktis yang bersifat *actionable* untuk berbagai stakeholder:
-
-### **Rekomendasi untuk Pemerintah dan Regulator**
-
-**1. Penguatan Regulasi dengan Pendekatan Berbasis Bukti.**  
-Regulasi tentang misinformasi perlu diperkuat dengan pendekatan berbasis bukti yang mempertimbangkan mekanisme psikologis penyebaran *hoax*. Regulasi yang efektif bukan hanya menghukum penyebar *hoax*, tetapi juga mengurangi insentif struktural yang memotivasi produksi dan amplifikasi konten disinformasi. Ini termasuk:
-- Kewajiban transparansi iklan politik di media sosial untuk mengidentifikasi sponsor kampanye disinformasi
-- Regulasi tentang penggunaan *bot* dan *fake accounts* yang digunakan untuk amplifikasi artifisial konten *hoax*
-- Mekanisme *rapid response* untuk *debunking* *hoax* yang beredar luas dalam periode kritis (masa kampanye)
-
-Penting untuk dicatat bahwa regulasi harus seimbang antara melindungi masyarakat dari misinformasi dan menjaga kebebasan berekspresi. Pengalaman internasional menunjukkan bahwa regulasi yang terlalu restriktif dapat disalahgunakan untuk membungkam kritik legitim terhadap pemerintah.
-
-**2. Investasi dalam Literasi Digital Berbasis Psikologi Moral.**  
-Program literasi digital saat ini cenderung fokus pada verifikasi teknis (*fact-checking*) tanpa membahas dimensi psikologis yang membuat orang rentan terhadap misinformasi. Berdasarkan temuan penelitian ini, program literasi digital perlu mengintegrasikan pemahaman tentang:
-- Bagaimana landasan moral dieksploitasi dalam *hoax* untuk mengaktifkan respon emosional
-- Mengapa konten bermuatan moral lebih mudah dipercaya dan dibagikan
-- Strategi metakognitif untuk mengenali ketika emosi moral dimanipulasi untuk tujuan politik
-
-Program literasi digital perlu disesuaikan dengan karakteristik audiens Indonesia, termasuk penggunaan bahasa dan contoh yang relevan dengan konteks lokal, serta penyesuaian dengan tingkat pendidikan dan akses teknologi yang beragam.
-
-**3. Penguatan Kapasitas Institusi Pemeriksa Fakta.**  
-MAFINDO dan organisasi pemeriksa fakta lainnya perlu diperkuat kapasitasnya melalui:
-- Pendanaan yang stabil dan independen untuk memastikan keberlanjutan operasional
-- Pelatihan tentang metodologi cek fakta lanjutan, termasuk verifikasi konten multimedia dan identifikasi konten hasil AI (*deepfake*)
-- Infrastruktur teknologi untuk deteksi otomatis *hoax* menggunakan pembelajaran mesin, mengurangi ketergantungan pada pelaporan manual
-
-Penting bahwa penguatan kapasitas ini tidak mengorbankan independensi organisasi pemeriksa fakta dari pengaruh pemerintah atau aktor politik.
-
-### **Rekomendasi untuk Platform Media Sosial**
-
-**4. Modifikasi Algoritma untuk Mengurangi Amplifikasi Konten Bermuatan Moral-Emosional.**  
-Platform media sosial perlu mengevaluasi kembali desain algoritma rekomendasi yang saat ini memprioritaskan *engagement* tanpa membedakan antara *engagement* positif (diskusi konstruktif) dan *engagement* negatif (penyebaran misinformasi). Modifikasi algoritmik yang perlu dipertimbangkan:
-- Mengurangi bobot sinyal *engagement* untuk konten yang mengandung kata-kata bermuatan moral-emosional tinggi dan klaim faktual yang belum diverifikasi
-- Meningkatkan promosi konten dari sumber kredibel (*trusted sources*) seperti media berita terakreditasi dan organisasi pemeriksa fakta
-- Implementasi *friction* (hambatan ringan seperti *pop-up* peringatan) sebelum pengguna membagikan konten yang ditandai sebagai berpotensi *misleading*
-
-Penelitian eksperimental menunjukkan bahwa *friction* sederhana seperti menanyakan "Apakah Anda yakin informasi ini benar?" sebelum berbagi dapat mengurangi penyebaran misinformasi secara signifikan tanpa membatasi kebebasan berekspresi.
-
-**5. Transparansi Koordinasi Penyebaran (*Coordinated Inauthentic Behavior*).**  
-Platform perlu meningkatkan deteksi dan transparansi tentang kampanye disinformasi terkoordinasi. Mengingat temuan penelitian ini tentang pola penargetan asimetris yang mengindikasikan koordinasi, platform perlu:
-- Mengembangkan dan mempublikasikan metrik tentang *Coordinated Inauthentic Behavior* (CIB) di Indonesia
-- Menghapus jaringan akun yang terlibat dalam CIB dan mempublikasikan laporan transparansi tentang tindakan ini
-- Bekerjasama dengan peneliti independen untuk mengaudit efektivitas kebijakan anti-CIB
-
-### **Rekomendasi untuk Organisasi Masyarakat Sipil dan Pemeriksa Fakta**
-
-**6. Strategi *Debunking* yang Disesuaikan dengan Profil Moral Audiens.**  
-Berdasarkan temuan tentang eksploitasi landasan moral, strategi *debunking* perlu disesuaikan dengan landasan moral yang diaktifkan oleh *hoax*. Penelitian Feinberg dan Willer (2013) tentang *moral reframing* menunjukkan bahwa pesan koreksi lebih efektif ketika dibingkai menggunakan landasan moral yang sama dengan audiens target. Contoh aplikasi:
-- Untuk *debunking hoax* yang mengeksploitasi kesetiaan kelompok (*Ingroup/Loyalty*), koreksi perlu menekankan bahwa *hoax* justru "mengkhianati" kepentingan kelompok dengan menyebarkan informasi palsu
-- Untuk *debunking hoax* yang mengeksploitasi ketidakadilan (*Fairness*), koreksi perlu menekankan bahwa *hoax* itu sendiri merupakan tindakan tidak adil yang memanipulasi opini publik
-
-**7. Fokus pada "*Prebunking*" untuk Topik Prediktabel.**  
-Mengingat pola temporal yang menunjukkan konsentrasi *hoax* di periode kritis (masa kampanye, penetapan hasil), organisasi pemeriksa fakta dapat mengadopsi strategi *prebunking* — memperingatkan masyarakat tentang jenis *hoax* yang kemungkinan akan beredar sebelum *hoax* tersebut muncul. Penelitian menunjukkan bahwa *prebunking* lebih efektif dibandingkan *debunking* karena menciptakan "antibodi kognitif" yang membuat individu lebih resisten terhadap misinformasi.
-
-### **Rekomendasi untuk Penelitian Masa Depan**
-
-**8. Integrasi Analisis Jaringan untuk Mengidentifikasi Aktor Disinformasi.**  
-Penelitian masa depan perlu mengintegrasikan analisis jaringan sosial untuk memetakan pola penyebaran *hoax* dan mengidentifikasi akun atau komunitas yang menjadi *hub* dalam amplifikasi disinformasi. Analisis ini dapat mengungkapkan apakah pola penargetan asimetris yang ditemukan dalam penelitian ini merupakan hasil koordinasi eksplisit atau emergensi dari aksi individual yang konvergen.
-
-**9. Studi Longitudinal tentang Dampak Paparan Misinformasi.**  
-Penelitian *panel survey* longitudinal diperlukan untuk mengukur dampak kumulatif paparan *hoax* terhadap sikap politik, kepercayaan institusional, dan perilaku pemilih. Desain longitudinal memungkinkan identifikasi efek kausal yang tidak dapat dicapai melalui desain *cross-sectional*.
-
-**10. Pengembangan *Moral Foundations Lexicon* untuk Bahasa Indonesia.**  
-Penelitian ini terbatas pada identifikasi topik tematik dan inferensi landasan moral dari konten linguistik. Pengembangan *lexicon* landasan moral yang disesuaikan dengan Bahasa Indonesia akan memungkinkan kuantifikasi intensitas moral yang lebih presisi dan memfasilitasi analisis komparatif dengan konteks bahasa lain.
-
-**11. Analisis Komparatif Pembingkaian Moral Antar Domain.**  
-Penelitian lanjutan perlu melakukan analisis mendalam terhadap kategori *scam* dan *others* untuk menjawab pertanyaan penelitian #3 yang belum terjawab secara komprehensif dalam studi ini. Analisis komparatif dapat mengungkapkan apakah *hoax* di domain kesehatan, bencana, dan penipuan finansial mengeksploitasi landasan moral yang berbeda dari *hoax* politik, dan bagaimana strategi pembingkaian disesuaikan dengan karakteristik audiens target di masing-masing domain. Metodologi yang disarankan mengkombinasikan *topic modeling* (pemodelan topik) LDA untuk identifikasi struktur tematik, *sentiment analysis* (analisis sentimen) untuk mengukur intensitas emosional, *Moral Foundations Dictionary* yang diadaptasi untuk Bahasa Indonesia, dan analisis komparatif statistik untuk menguji signifikansi perbedaan antar domain.
-
-## **Refleksi Akhir: Misinformasi sebagai Tantangan Demokrasi**
-
-Temuan penelitian ini menggarisbawahi bahwa misinformasi politik bukan sekadar masalah teknis yang dapat diselesaikan melalui verifikasi fakta atau moderasi konten. Misinformasi adalah manifestasi dari kontestasi politik yang lebih dalam tentang siapa yang memiliki otoritas untuk mendefinisikan realitas, siapa yang berhak berpartisipasi dalam wacana publik, dan bagaimana konflik nilai dalam masyarakat plural dinegosiasikan.
-
-Dalam konteks Indonesia tahun 2024, misinformasi politik mencerminkan ketegangan antara aspirasi demokratis pasca-Reformasi dan persistensi praktik politik otoriter yang memanfaatkan teknologi digital untuk tujuan manipulasi. Pola penargetan asimetris yang ditemukan dalam penelitian ini menunjukkan bahwa kompetisi elektoral Indonesia belum sepenuhnya demokratis — akses yang tidak setara terhadap ekosistem informasi menciptakan keunggulan strategis bagi aktor tertentu yang memiliki sumber daya untuk memobilisasi kampanye disinformasi.
-
-Mengatasi tantangan ini memerlukan pendekatan holistik yang mengintegrasikan regulasi yang berbasis bukti, investasi dalam literasi digital, reformasi desain platform media sosial, penguatan organisasi masyarakat sipil, dan yang paling fundamental — komitmen kolektif untuk memelihara norma demokrasi yang menghargai kebenaran faktual, pluralisme perspektif, dan kompetisi politik yang adil.
-
-Penelitian ini berharap dapat berkontribusi pada pemahaman yang lebih mendalam tentang dinamika misinformasi Indonesia dan menginspirasi upaya kolaboratif dari berbagai stakeholder untuk membangun ekosistem informasi yang lebih sehat, mendukung proses demokrasi yang lebih berkualitas, dan pada akhirnya, memperkuat resiliensi masyarakat Indonesia terhadap manipulasi informasi.
+**Untuk penelitian lanjutan**, diperlukan integrasi analisis jaringan sosial untuk mengidentifikasi aktor disinformasi, studi longitudinal tentang dampak paparan *hoax* terhadap sikap dan perilaku pemilih, pengembangan *Moral Foundations Lexicon* untuk Bahasa Indonesia, dan analisis komparatif pembingkaian moral antar domain (*scam* dan *others*) untuk melengkapi pemahaman komprehensif tentang ekosistem disinformasi Indonesia.
 
 # **DAFTAR PUSTAKA**
 
