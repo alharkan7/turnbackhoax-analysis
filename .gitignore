@@ -59,3 +59,62 @@ venv.bak/
 .RData
 .Ruserdata
 *.Rproj.user/
+
+# Analysis Output Files
+# ====================
+# Exclude all generated visualizations, models, and results
+# Keep only scripts (.py) and input data
+
+# HTML visualizations
+*.html
+
+# Image outputs
+*.png
+*.jpg
+*.jpeg
+*.svg
+
+# Pickle model files
+*.pkl
+
+# Analysis results and output directories
+sentiment_analysis/*_results.csv
+sentiment_analysis/*_summary.csv
+sentiment_analysis/analysis_report.md
+sentiment_analysis/sentiment_report.html
+
+text_network/network_analysis_results/
+topic_modeling/coherence_scores.csv
+topic_modeling/document_topics.csv
+topic_modeling/lda_visualization.html
+topic_modeling/topic_summary.csv
+topic_modeling/topic_terms.csv
+topic_modeling/dictionary.pkl
+topic_modeling/lda_model_*.pkl
+topic_modeling/*_lda_viz.html
+topic_modeling/ANALYSIS_REPORT.md
+topic_modeling/COMPLETE_ANALYSIS_SUMMARY.md
+
+# Category subdirectories - exclude output files but keep input data
+topic_modeling/others_category/*.pkl
+topic_modeling/others_category/*.html
+topic_modeling/others_category/coherence_scores.csv
+topic_modeling/others_category/document_topics.csv
+topic_modeling/others_category/topic_summary.csv
+topic_modeling/others_category/topic_terms.csv
+
+topic_modeling/scam_category/*.pkl
+topic_modeling/scam_category/*.html
+topic_modeling/scam_category/coherence_scores.csv
+topic_modeling/scam_category/document_topics.csv
+topic_modeling/scam_category/topic_summary.csv
+topic_modeling/scam_category/topic_terms.csv
+
+topic_modeling/viz/
+
+# Keep input data files
+!data_prep/*.csv
+!scraping/*.csv
+!topic_modeling/*_hoax_text.csv
+!topic_modeling/*/others_hoax_text.csv
+!topic_modeling/*/scam_hoax_text.csv
